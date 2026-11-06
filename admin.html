@@ -457,7 +457,7 @@
           </form>
 
           <h5 style="margin-top: 30px; font-size: 14px; font-weight: 700">Script SQL para criar a tabela no Supabase:</h5>
-          <pre class="code-snippet"><code>CREATE TABLE produtos (
+          <pre class="code-snippet"><code>CREATE TABLE IF NOT EXISTS produtos (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   category TEXT NOT NULL,
@@ -466,7 +466,16 @@
   image TEXT,
   tag TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
-);</code></pre>
+);
+
+-- Habilita Row Level Security
+ALTER TABLE produtos ENABLE ROW LEVEL SECURITY;
+
+-- Permite que todos os clientes vejam o catálogo
+CREATE POLICY "Leitura pública" ON produtos FOR SELECT USING (true);
+
+-- Permite gravação pelo painel administrativo
+CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WITH CHECK (true);</code></pre>
         </div>
       </section>
 
