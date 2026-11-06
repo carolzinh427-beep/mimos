@@ -1,5 +1,5 @@
 // Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
-const products = [
+const initialProducts = [
   // --- FEMININO ---
   {
     id: "fem-1",
@@ -171,9 +171,15 @@ const products = [
   }
 ];
 
+// Disponibiliza produtos iniciais globalmente
+window.defaultProducts = initialProducts;
+
+// Carrega produtos (localStorage > fallback inicial)
+let products = JSON.parse(localStorage.getItem("mimo_custom_products") || "null") || [...initialProducts];
+
 const WHATSAPP_PHONE = "5561982378130";
 
-// Elementos do DOM
+// Elementos do DOM do Catálogo (presentes apenas em index.html)
 const grid = document.querySelector("#product-grid");
 const count = document.querySelector("#result-count");
 const search = document.querySelector("#search");
@@ -197,7 +203,7 @@ let favorites = JSON.parse(localStorage.getItem("mimo_favs") || "[]");
 
 // Formatação de Preço BRL
 function formatPrice(val) {
-  return val.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return Number(val).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 // Gera URL do WhatsApp para pedir um item
@@ -208,7 +214,9 @@ function getWaProductUrl(product) {
 
 // Renderização dos Produtos
 function renderProducts() {
-  const query = search.value.trim().toLowerCase();
+  if (!grid) return;
+
+  const query = search ? search.value.trim().toLowerCase() : "";
   const filtered = products.filter((product) => {
     const matchesCategory = activeFilter === "Todos" || product.category === activeFilter;
     const matchesSearch = !query || `${product.name} ${product.detail} ${product.category}`.toLowerCase().includes(query);
@@ -223,7 +231,7 @@ function renderProducts() {
       <article class="product-card" data-id="${product.id}">
         <div class="product-image-wrap">
           <img src="${product.image}" alt="${product.name}" loading="lazy" />
-          <span class="product-tag">${product.tag}</span>
+          <span class="product-tag">${product.tag || 'Destaque'}</span>
           <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}">
             ${isFav ? '♥' : '♡'}
           </button>
@@ -233,7 +241,7 @@ function renderProducts() {
             <span class="product-category">${product.category}</span>
           </div>
           <h3>${product.name}</h3>
-          <p>${product.detail}</p>
+          <p>${product.detail || ''}</p>
           <div class="product-bottom">
             <div class="product-price">
               <small>Valor</small>
@@ -249,8 +257,8 @@ function renderProducts() {
     `;
   }).join("");
 
-  count.textContent = `Mostrando ${visible.length} de ${filtered.length} produtos`;
-  loadMoreBtn.hidden = visible.length >= filtered.length;
+  if (count) count.textContent = `Mostrando ${visible.length} de ${filtered.length} produtos`;
+  if (loadMoreBtn) loadMoreBtn.hidden = visible.length >= filtered.length;
 }
 
 // Filtro por Chips
@@ -279,18 +287,24 @@ categoryCards.forEach((card) => {
 });
 
 // Busca e Carregar Mais
-search.addEventListener("input", () => {
-  visibleCount = 8;
-  renderProducts();
-});
+if (search) {
+  search.addEventListener("input", () => {
+    visibleCount = 8;
+    renderProducts();
+  });
+}
 
-loadMoreBtn.addEventListener("click", () => {
-  visibleCount += 4;
-  renderProducts();
-});
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener("click", () => {
+    visibleCount += 4;
+    renderProducts();
+  });
+}
 
 // Gerenciamento de Favoritos
 function updateFavoritesUI() {
+  if (!favBadge || !drawerCount || !drawerItems) return;
+
   localStorage.setItem("mimo_favs", JSON.stringify(favorites));
   favBadge.textContent = favorites.length;
 
@@ -298,10 +312,10 @@ function updateFavoritesUI() {
   drawerCount.textContent = `${favProducts.length} ${favProducts.length === 1 ? 'item salvo' : 'itens salvos'}`;
 
   if (favProducts.length === 0) {
-    drawerItems.innerHTML = '<p class="drawer-empty">Você ainda não favoritou nenhuma peça. Clique no coração ♡ nos produtos para salvar seus favoritos!</p>';
-    sendFavsWa.style.display = "none";
+    drawerItems.innerHTML = '<p class="drawer-empty">Você ainda não favoritou nenhuma peça. Clique no coração ♡ nos produtos para salvar seus favoritos</p>';
+    if (sendFavsWa) sendFavsWa.style.display = "none";
   } else {
-    sendFavsWa.style.display = "inline-flex";
+    if (sendFavsWa) sendFavsWa.style.display = "inline-flex";
     drawerItems.innerHTML = favProducts.map((p) => `
       <div class="drawer-item">
         <img src="${p.image}" alt="${p.name}" />
@@ -313,65 +327,93 @@ function updateFavoritesUI() {
       </div>
     `).join("");
 
-    // Formata mensagem para enviar todos os favoritos via WhatsApp
     const listText = favProducts.map((p) => `• ${p.name} (${formatPrice(p.price)})`).join("\n");
     const fullText = `Olá! Salvei os seguintes itens no catálogo da Mimo Íntimo e gostaria de consultar tamanhos e cores:\n\n${listText}\n\nComo podemos proceder?`;
-    sendFavsWa.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(fullText)}`;
+    if (sendFavsWa) sendFavsWa.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(fullText)}`;
   }
 }
 
 // Toggle de Favoritar nos Cards
-grid.addEventListener("click", (event) => {
-  const btn = event.target.closest(".product-fav");
-  if (!btn) return;
+if (grid) {
+  grid.addEventListener("click", (event) => {
+    const btn = event.target.closest(".product-fav");
+    if (!btn) return;
 
-  const id = btn.dataset.id;
-  if (favorites.includes(id)) {
-    favorites = favorites.filter((favId) => favId !== id);
-  } else {
-    favorites.push(id);
-  }
-  updateFavoritesUI();
-  renderProducts();
-});
+    const id = btn.dataset.id;
+    if (favorites.includes(id)) {
+      favorites = favorites.filter((favId) => favId !== id);
+    } else {
+      favorites.push(id);
+    }
+    updateFavoritesUI();
+    renderProducts();
+  });
+}
 
 // Remover favorito a partir da Gaveta
-drawerItems.addEventListener("click", (event) => {
-  const removeBtn = event.target.closest(".drawer-item-remove");
-  if (!removeBtn) return;
-  const id = removeBtn.dataset.id;
-  favorites = favorites.filter((favId) => favId !== id);
-  updateFavoritesUI();
-  renderProducts();
-});
+if (drawerItems) {
+  drawerItems.addEventListener("click", (event) => {
+    const removeBtn = event.target.closest(".drawer-item-remove");
+    if (!removeBtn) return;
+    const id = removeBtn.dataset.id;
+    favorites = favorites.filter((favId) => favId !== id);
+    updateFavoritesUI();
+    renderProducts();
+  });
+}
 
 // Abrir / Fechar Gaveta de Favoritos
 function toggleDrawer(open) {
+  if (!favDrawer || !drawerOverlay) return;
   favDrawer.classList.toggle("open", open);
   drawerOverlay.classList.toggle("open", open);
   favDrawer.setAttribute("aria-hidden", String(!open));
 }
 
-favToggle.addEventListener("click", () => toggleDrawer(true));
-drawerClose.addEventListener("click", () => toggleDrawer(false));
-drawerOverlay.addEventListener("click", () => toggleDrawer(false));
+if (favToggle) favToggle.addEventListener("click", () => toggleDrawer(true));
+if (drawerClose) drawerClose.addEventListener("click", () => toggleDrawer(false));
+if (drawerOverlay) drawerOverlay.addEventListener("click", () => toggleDrawer(false));
 
 // Menu Mobile
 const menuToggle = document.querySelector(".menu-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
 
-menuToggle.addEventListener("click", () => {
-  const open = mobileMenu.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(open));
-});
-
-document.querySelectorAll(".mobile-menu a").forEach((link) => {
-  link.addEventListener("click", () => {
-    mobileMenu.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
+if (menuToggle && mobileMenu) {
+  menuToggle.addEventListener("click", () => {
+    const open = mobileMenu.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(open));
   });
-});
+
+  document.querySelectorAll(".mobile-menu a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+// Sincronização Assíncrona com Supabase (se configurado)
+async function syncFromSupabase() {
+  try {
+    const cfgStr = localStorage.getItem("mimo_supabase_config");
+    if (!cfgStr) return;
+    const cfg = JSON.parse(cfgStr);
+    if (cfg && cfg.url && cfg.key && window.supabase) {
+      const client = window.supabase.createClient(cfg.url, cfg.key);
+      const { data, error } = await client.from(cfg.table || "produtos").select("*");
+      if (!error && data && data.length > 0) {
+        products = data;
+        localStorage.setItem("mimo_custom_products", JSON.stringify(products));
+        renderProducts();
+        updateFavoritesUI();
+      }
+    }
+  } catch (err) {
+    console.warn("Supabase fetch warning:", err);
+  }
+}
 
 // Inicialização
 updateFavoritesUI();
 renderProducts();
+syncFromSupabase();

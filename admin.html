@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Administrativo | Mimo Íntimo</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --purple: #6b3b8f;
+        --purple-dark: #3b1e59;
+        --purple-soft: #ede4f3;
+        --ink: #281b2e;
+        --muted: #7f7483;
+        --bg: #f9f6f2;
+        --white: #ffffff;
+        --line: rgba(72, 43, 89, 0.12);
+        --green: #25d366;
+        --danger: #dc3545;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        min-height: 100vh;
+      }
+      a { color: inherit; text-decoration: none; }
+
+      /* Top Header */
+      .admin-nav {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .brand-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-box img {
+        height: 38px;
+      }
+      .admin-tag {
+        background: var(--purple-soft);
+        color: var(--purple);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .admin-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .btn {
+        padding: 9px 18px;
+        border-radius: 999px;
+        font: 600 12px "DM Sans", sans-serif;
+        cursor: pointer;
+        border: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+      .btn-primary {
+        background: var(--purple);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--purple-dark);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink);
+      }
+      .btn-outline:hover {
+        background: var(--purple-soft);
+        border-color: var(--purple);
+      }
+      .btn-danger {
+        background: #ffe5e7;
+        color: var(--danger);
+      }
+      .btn-danger:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      /* Container */
+      .container {
+        max-width: 1200px;
+        margin: 32px auto;
+        padding: 0 24px;
+      }
+
+      /* Login Screen */
+      .login-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+      }
+      .login-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 40px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 16px 40px rgba(66, 35, 84, 0.08);
+      }
+      .login-card img {
+        height: 52px;
+        margin-bottom: 24px;
+      }
+      .login-card h2 {
+        font: 500 24px "Playfair Display", serif;
+        margin-bottom: 8px;
+      }
+      .login-card p {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .input-group {
+        text-align: left;
+        margin-bottom: 18px;
+      }
+      .input-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--ink);
+      }
+      .input-group input,
+      .input-group select,
+      .input-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font: 13px "DM Sans", sans-serif;
+        outline: 0;
+        background: #faf7f8;
+        transition: border-color 0.2s;
+      }
+      .input-group input:focus,
+      .input-group select:focus,
+      .input-group textarea:focus {
+        border-color: var(--purple);
+        background: #fff;
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 10px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 28px;
+      }
+      .tab-btn {
+        background: none;
+        border: 0;
+        padding: 12px 20px;
+        font: 600 13px "DM Sans", sans-serif;
+        color: var(--muted);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+      }
+      .tab-btn.active {
+        color: var(--purple);
+        border-color: var(--purple);
+      }
+
+      /* Tab Content */
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      /* Products Table & Grid */
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .panel-header h3 {
+        font: 500 24px "Playfair Display", serif;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      .product-item {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: box-shadow 0.2s;
+      }
+      .product-item:hover {
+        box-shadow: 0 10px 30px rgba(50, 30, 62, 0.08);
+      }
+      .product-item-img {
+        height: 180px;
+        position: relative;
+        background: #ede6f2;
+      }
+      .product-item-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .product-item-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 8px;
+      }
+      .product-item-body strong {
+        font-size: 15px;
+      }
+      .product-item-body p {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .product-item-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+      }
+      .product-item-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--purple);
+      }
+      .product-item-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      /* Modal for Add / Edit Product */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(4px);
+        display: none;
+        place-items: center;
+        z-index: 100;
+        padding: 20px;
+      }
+      .modal-overlay.open {
+        display: grid;
+      }
+      .modal-card {
+        background: #fff;
+        border-radius: 24px;
+        max-width: 520px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      }
+      .modal-card h3 {
+        font: 500 22px "Playfair Display", serif;
+        margin-bottom: 20px;
+      }
+      .upload-preview {
+        height: 150px;
+        border-radius: 12px;
+        border: 2px dashed var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 12px;
+        position: relative;
+        background: #faf7f8;
+      }
+      .upload-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .upload-preview span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* Settings & Supabase Cards */
+      .settings-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 650px;
+        margin-bottom: 24px;
+      }
+      .settings-card h4 {
+        font: 500 20px "Playfair Display", serif;
+        margin-bottom: 8px;
+      }
+      .settings-card p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .code-snippet {
+        background: #281b2e;
+        color: #e9d5f5;
+        padding: 16px;
+        border-radius: 12px;
+        font-family: monospace;
+        font-size: 12px;
+        overflow-x: auto;
+        margin: 14px 0;
+      }
+      .alert {
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 16px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Nav -->
+    <header class="admin-nav" id="admin-header" style="display: none">
+      <div class="brand-box">
+        <img src="logo.png" alt="Mimo Íntimo" />
+        <span class="admin-tag">Painel Admin</span>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" target="_blank" class="btn btn-outline">Ver Catálogo ↗</a>
+        <button id="logout-btn" class="btn btn-danger">Sair</button>
+      </div>
+    </header>
+
+    <!-- Tela de Login -->
+    <div class="login-wrap" id="login-section">
+      <div class="login-card">
+        <img src="logo.png" alt="Mimo Íntimo" />
+        <h2>Acesso Administrativo</h2>
+        <p>Digite sua senha para gerenciar produtos, imagens e integrações</p>
+        <div id="login-alert" class="alert alert-danger">Senha incorreta</div>
+        <form id="login-form">
+          <div class="input-group">
+            <label for="admin-pass">Senha de Acesso</label>
+            <input type="password" id="admin-pass" placeholder="Digite sua senha" required autofocus />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 13px">
+            Entrar no Painel
+          </button>
+        </form>
+        <small style="display: block; margin-top: 18px; font-size: 11px; color: var(--muted)">
+          Senha padrão inicial: <strong>mimo2026</strong>
+        </small>
+      </div>
+    </div>
+
+    <!-- Conteúdo Principal do Painel -->
+    <main class="container" id="admin-main" style="display: none">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-products">📦 Produtos & Imagens</button>
+        <button class="tab-btn" data-tab="tab-supabase">⚡ Conexão Supabase</button>
+        <button class="tab-btn" data-tab="tab-security">🔐 Senha & Segurança</button>
+      </div>
+
+      <!-- ABA 1: PRODUTOS -->
+      <section class="tab-panel active" id="tab-products">
+        <div class="panel-header">
+          <div>
+            <h3>Gerenciar Catálogo</h3>
+            <p style="font-size: 13px; color: var(--muted)" id="products-count-label">Carregando peças...</p>
+          </div>
+          <button class="btn btn-primary" id="open-add-modal">+ Novo Produto</button>
+        </div>
+
+        <div id="products-list" class="products-grid">
+          <!-- Renderizado via JavaScript -->
+        </div>
+      </section>
+
+      <!-- ABA 2: SUPABASE -->
+      <section class="tab-panel" id="tab-supabase">
+        <div class="settings-card">
+          <h4>Integração com Supabase</h4>
+          <p>
+            Conecte seu projeto Supabase para armazenar a tabela de produtos e usar o Supabase Storage para uploads de imagens.
+          </p>
+
+          <div id="supabase-alert" class="alert alert-success"></div>
+
+          <form id="supabase-form">
+            <div class="input-group">
+              <label for="sb-url">Project URL (Supabase)</label>
+              <input type="url" id="sb-url" placeholder="https://xyzcompany.supabase.co" />
+            </div>
+
+            <div class="input-group">
+              <label for="sb-key">Anon / Public API Key</label>
+              <input type="password" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsIn..." />
+            </div>
+
+            <div class="input-group">
+              <label for="sb-table">Nome da Tabela de Produtos</label>
+              <input type="text" id="sb-table" value="produtos" />
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px">
+              <button type="submit" class="btn btn-primary">Salvar Credenciais</button>
+              <button type="button" id="sb-test-btn" class="btn btn-outline">Testar Conexão</button>
+              <button type="button" id="sb-sync-btn" class="btn btn-outline">Exportar Produtos para Supabase</button>
+            </div>
+          </form>
+
+          <h5 style="margin-top: 30px; font-size: 14px; font-weight: 700">Script SQL para criar a tabela no Supabase:</h5>
+          <pre class="code-snippet"><code>CREATE TABLE produtos (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL,
+  detail TEXT,
+  price NUMERIC,
+  image TEXT,
+  tag TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);</code></pre>
+        </div>
+      </section>
+
+      <!-- ABA 3: SEGURANÇA -->
+      <section class="tab-panel" id="tab-security">
+        <div class="settings-card">
+          <h4>Alterar Senha do Administrador</h4>
+          <p>Defina uma nova senha para acessar o painel administrativo da Mimo Íntimo.</p>
+
+          <div id="pass-alert" class="alert alert-success"></div>
+
+          <form id="change-pass-form">
+            <div class="input-group">
+              <label for="curr-pass">Senha Atual</label>
+              <input type="password" id="curr-pass" required />
+            </div>
+            <div class="input-group">
+              <label for="new-pass">Nova Senha</label>
+              <input type="password" id="new-pass" required minlength="4" />
+            </div>
+            <div class="input-group">
+              <label for="confirm-pass">Confirmar Nova Senha</label>
+              <input type="password" id="confirm-pass" required minlength="4" />
+            </div>
+            <button type="submit" class="btn btn-primary">Atualizar Senha</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Adicionar / Editar Produto -->
+    <div class="modal-overlay" id="product-modal">
+      <div class="modal-card">
+        <h3 id="modal-title">Novo Produto</h3>
+        <form id="product-form">
+          <input type="hidden" id="prod-id" />
+
+          <div class="upload-preview" id="image-preview-box">
+            <span id="preview-placeholder">Nenhuma imagem selecionada</span>
+            <img id="preview-img" src="" alt="" style="display: none" />
+          </div>
+
+          <div class="input-group">
+            <label>Upload de Imagem (do seu computador ou celular)</label>
+            <input type="file" id="prod-file" accept="image/*" />
+          </div>
+
+          <div class="input-group">
+            <label for="prod-image-url">Ou Cole uma URL de Imagem</label>
+            <input type="url" id="prod-image-url" placeholder="https://..." />
+          </div>
+
+          <div class="input-group">
+            <label for="prod-name">Nome do Produto</label>
+            <input type="text" id="prod-name" required placeholder="Ex: Conjunto Rendado Sublime" />
+          </div>
+
+          <div class="input-group">
+            <label for="prod-category">Categoria / Sessão</label>
+            <select id="prod-category" required>
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Infantil">Infantil</option>
+              <option value="Moda Praia">Moda Praia</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="prod-detail">Detalhes / Tecido</label>
+            <textarea id="prod-detail" rows="2" placeholder="Ex: Toque de seda geladinho com renda antialérgica"></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="prod-price">Valor (R$)</label>
+            <input type="number" step="0.01" id="prod-price" required placeholder="129.90" />
+          </div>
+
+          <div class="input-group">
+            <label for="prod-tag">Etiqueta de Destaque</label>
+            <input type="text" id="prod-tag" placeholder="Ex: Destaque, Novo, Queridinho" value="Destaque" />
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 24px">
+            <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center">Salvar Produto</button>
+            <button type="button" class="btn btn-outline" id="close-modal-btn">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      // Senha Padrão
+      const DEFAULT_PASSWORD = "mimo2026";
+      let adminPassword = localStorage.getItem("mimo_admin_pass") || DEFAULT_PASSWORD;
+
+      // Estado de Autenticação
+      const loginSection = document.querySelector("#login-section");
+      const adminMain = document.querySelector("#admin-main");
+      const adminHeader = document.querySelector("#admin-header");
+      const loginForm = document.querySelector("#login-form");
+      const loginPass = document.querySelector("#admin-pass");
+      const loginAlert = document.querySelector("#login-alert");
+      const logoutBtn = document.querySelector("#logout-btn");
+
+      function checkAuth() {
+        if (sessionStorage.getItem("mimo_logged_in") === "true") {
+          loginSection.style.display = "none";
+          adminMain.style.display = "block";
+          adminHeader.style.display = "flex";
+          loadAdminProducts();
+          loadSupabaseConfig();
+        } else {
+          loginSection.style.display = "flex";
+          adminMain.style.display = "none";
+          adminHeader.style.display = "none";
+        }
+      }
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (loginPass.value === adminPassword) {
+          sessionStorage.setItem("mimo_logged_in", "true");
+          loginAlert.style.display = "none";
+          checkAuth();
+        } else {
+          loginAlert.style.display = "block";
+        }
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        sessionStorage.removeItem("mimo_logged_in");
+        checkAuth();
+      });
+
+      // Navegação por Abas
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+          document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById(btn.dataset.tab).classList.add("active");
+        });
+      });
+
+      // Alteração de Senha
+      const changePassForm = document.getElementById("change-pass-form");
+      const passAlert = document.getElementById("pass-alert");
+
+      changePassForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const curr = document.getElementById("curr-pass").value;
+        const newP = document.getElementById("new-pass").value;
+        const confirmP = document.getElementById("confirm-pass").value;
+
+        if (curr !== adminPassword) {
+          passAlert.className = "alert alert-danger";
+          passAlert.textContent = "A senha atual informada está incorreta";
+          passAlert.style.display = "block";
+          return;
+        }
+        if (newP !== confirmP) {
+          passAlert.className = "alert alert-danger";
+          passAlert.textContent = "A nova senha e a confirmação não coincidem";
+          passAlert.style.display = "block";
+          return;
+        }
+
+        adminPassword = newP;
+        localStorage.setItem("mimo_admin_pass", newP);
+        passAlert.className = "alert alert-success";
+        passAlert.textContent = "Senha alterada com sucesso!";
+        passAlert.style.display = "block";
+        changePassForm.reset();
+      });
+
+      // Gerenciamento de Produtos
+      let products = [];
+
+      function loadAdminProducts() {
+        const stored = localStorage.getItem("mimo_custom_products");
+        if (stored) {
+          products = JSON.parse(stored);
+        } else if (window.defaultProducts) {
+          products = [...window.defaultProducts];
+        } else {
+          products = [];
+        }
+        renderAdminGrid();
+      }
+
+      function saveProducts() {
+        localStorage.setItem("mimo_custom_products", JSON.stringify(products));
+        renderAdminGrid();
+      }
+
+      function renderAdminGrid() {
+        const grid = document.getElementById("products-list");
+        const countLabel = document.getElementById("products-count-label");
+        countLabel.textContent = `${products.length} peças cadastradas`;
+
+        if (products.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px">Nenhum produto cadastrado. Clique em "+ Novo Produto" para começar</p>';
+          return;
+        }
+
+        grid.innerHTML = products.map((p) => `
+          <div class="product-item">
+            <div class="product-item-img">
+              <img src="${p.image}" alt="${p.name}" />
+              <span style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px">${p.category}</span>
+            </div>
+            <div class="product-item-body">
+              <strong>${p.name}</strong>
+              <p>${p.detail || ""}</p>
+              <div class="product-item-meta">
+                <span class="product-item-price">R$ ${Number(p.price).toFixed(2).replace('.', ',')}</span>
+                <div class="product-item-actions">
+                  <button class="btn btn-outline" onclick="editProduct('${p.id}')">Editar</button>
+                  <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Excluir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Modal Produto
+      const modal = document.getElementById("product-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const productForm = document.getElementById("product-form");
+      const closeModalBtn = document.getElementById("close-modal-btn");
+      const openAddBtn = document.getElementById("open-add-modal");
+      const previewImg = document.getElementById("preview-img");
+      const previewPlaceholder = document.getElementById("preview-placeholder");
+      const prodFile = document.getElementById("prod-file");
+      const prodUrl = document.getElementById("prod-image-url");
+
+      let currentImageData = "";
+
+      prodFile.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          currentImageData = event.target.result;
+          previewImg.src = currentImageData;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+          prodUrl.value = "";
+        };
+        reader.readAsDataURL(file);
+      });
+
+      prodUrl.addEventListener("input", () => {
+        if (prodUrl.value.trim()) {
+          currentImageData = prodUrl.value.trim();
+          previewImg.src = currentImageData;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+          prodFile.value = "";
+        }
+      });
+
+      openAddBtn.addEventListener("click", () => {
+        modalTitle.textContent = "Novo Produto";
+        productForm.reset();
+        document.getElementById("prod-id").value = "";
+        currentImageData = "";
+        previewImg.style.display = "none";
+        previewPlaceholder.style.display = "block";
+        modal.classList.add("open");
+      });
+
+      closeModalBtn.addEventListener("click", () => {
+        modal.classList.remove("open");
+      });
+
+      window.editProduct = function (id) {
+        const p = products.find((item) => item.id === id);
+        if (!p) return;
+        modalTitle.textContent = "Editar Produto";
+        document.getElementById("prod-id").value = p.id;
+        document.getElementById("prod-name").value = p.name;
+        document.getElementById("prod-category").value = p.category;
+        document.getElementById("prod-detail").value = p.detail || "";
+        document.getElementById("prod-price").value = p.price;
+        document.getElementById("prod-tag").value = p.tag || "Destaque";
+        currentImageData = p.image;
+        if (p.image) {
+          previewImg.src = p.image;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+          if (!p.image.startsWith("data:")) {
+            prodUrl.value = p.image;
+          }
+        }
+        modal.classList.add("open");
+      };
+
+      window.deleteProduct = function (id) {
+        if (confirm("Tem certeza que deseja excluir esta peça do catálogo?")) {
+          products = products.filter((p) => p.id !== id);
+          saveProducts();
+        }
+      };
+
+      productForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = document.getElementById("prod-id").value || `prod-${Date.now()}`;
+        const name = document.getElementById("prod-name").value.trim();
+        const category = document.getElementById("prod-category").value;
+        const detail = document.getElementById("prod-detail").value.trim();
+        const price = parseFloat(document.getElementById("prod-price").value) || 0;
+        const tag = document.getElementById("prod-tag").value.trim() || "Destaque";
+        const image = currentImageData || "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80";
+
+        const existingIndex = products.findIndex((p) => p.id === id);
+        const itemData = { id, name, category, detail, price, tag, image };
+
+        if (existingIndex >= 0) {
+          products[existingIndex] = itemData;
+        } else {
+          products.unshift(itemData);
+        }
+
+        saveProducts();
+        modal.classList.remove("open");
+      });
+
+      // Supabase Config
+      const sbForm = document.getElementById("supabase-form");
+      const sbAlert = document.getElementById("supabase-alert");
+      const sbTestBtn = document.getElementById("sb-test-btn");
+      const sbSyncBtn = document.getElementById("sb-sync-btn");
+
+      function loadSupabaseConfig() {
+        const cfg = JSON.parse(localStorage.getItem("mimo_supabase_config") || "{}");
+        if (cfg.url) document.getElementById("sb-url").value = cfg.url;
+        if (cfg.key) document.getElementById("sb-key").value = cfg.key;
+        if (cfg.table) document.getElementById("sb-table").value = cfg.table;
+      }
+
+      sbForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const url = document.getElementById("sb-url").value.trim();
+        const key = document.getElementById("sb-key").value.trim();
+        const table = document.getElementById("sb-table").value.trim() || "produtos";
+
+        localStorage.setItem("mimo_supabase_config", JSON.stringify({ url, key, table }));
+        sbAlert.className = "alert alert-success";
+        sbAlert.textContent = "Credenciais do Supabase salvas com sucesso!";
+        sbAlert.style.display = "block";
+      });
+
+      sbTestBtn.addEventListener("click", async () => {
+        const url = document.getElementById("sb-url").value.trim();
+        const key = document.getElementById("sb-key").value.trim();
+        const table = document.getElementById("sb-table").value.trim() || "produtos";
+
+        if (!url || !key) {
+          alert("Por favor, preencha o Project URL e a Anon Key do Supabase.");
+          return;
+        }
+
+        try {
+          const client = supabase.createClient(url, key);
+          const { data, error } = await client.from(table).select("*").limit(1);
+          if (error) throw error;
+          sbAlert.className = "alert alert-success";
+          sbAlert.textContent = "Conexão com o Supabase estabelecida com sucesso!";
+          sbAlert.style.display = "block";
+        } catch (err) {
+          sbAlert.className = "alert alert-danger";
+          sbAlert.textContent = `Erro ao conectar: ${err.message}`;
+          sbAlert.style.display = "block";
+        }
+      });
+
+      sbSyncBtn.addEventListener("click", async () => {
+        const url = document.getElementById("sb-url").value.trim();
+        const key = document.getElementById("sb-key").value.trim();
+        const table = document.getElementById("sb-table").value.trim() || "produtos";
+
+        if (!url || !key) {
+          alert("Preencha e salve suas credenciais do Supabase antes de sincronizar.");
+          return;
+        }
+
+        try {
+          const client = supabase.createClient(url, key);
+          const cleanProducts = products.map((p) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            detail: p.detail,
+            price: p.price,
+            tag: p.tag,
+            image: p.image
+          }));
+          const { error } = await client.from(table).upsert(cleanProducts, { onConflict: "id" });
+          if (error) throw error;
+          alert("Catálogo sincronizado com sucesso para o banco de dados do Supabase!");
+        } catch (err) {
+          alert(`Erro na sincronização: ${err.message}`);
+        }
+      });
+
+      // Inicialização
+      checkAuth();
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
