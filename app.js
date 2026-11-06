@@ -7,64 +7,73 @@ const initialProducts = [
     category: "Feminino",
     detail: "Renda antialérgica com suporte suave e caimento impecável",
     price: 129.90,
-    image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80",
+    image: "images/conjunto-rendado.jpg",
     tag: "Destaque"
   },
   {
     id: "fem-2",
     name: "Camisola Charlize em Liganete",
     category: "Feminino",
-    detail: "Toque de seda geladinho com renda no decote",
+    detail: "Toque de seda geladinho com renda delicada no decote",
     price: 139.90,
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=650&q=80",
+    image: "images/camisola-charlize.jpg",
     tag: "Queridinho"
   },
   {
     id: "fem-3",
-    name: "Shortdoll Pérola em Cetim",
+    name: "Calça Legging Conforto Sem Costura",
     category: "Feminino",
-    detail: "Alças reguláveis, leveza e acabamento acetinado de alto padrão",
-    price: 109.90,
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=650&q=80",
+    detail: "Cintura alta modeladora, compressão ideal e toque macio aveludado",
+    price: 119.90,
+    image: "images/calca-legging.jpg",
     tag: "Novo"
   },
   {
     id: "fem-4",
+    name: "Shortdoll Pérola em Cetim",
+    category: "Feminino",
+    detail: "Alças reguláveis, leveza e acabamento acetinado de alto padrão",
+    price: 109.90,
+    image: "images/shortdoll-cetim.jpg",
+    tag: "Luxo"
+  },
+  {
+    id: "fem-5",
     name: "Sutiã Comfort Sem Costura",
     category: "Feminino",
     detail: "Liberdade sem aros e máxima sustentação anatômica",
     price: 79.90,
-    image: "https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=650&q=80",
+    image: "images/sutia-sem-costura.jpg",
     tag: "Essencial"
   },
   {
-    id: "fem-5",
+    id: "fem-6",
     name: "Robe Luxo em Viscose com Renda",
     category: "Feminino",
     detail: "Manga flare fluída com faixa para amarração delicada",
     price: 169.90,
-    image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=650&q=80",
+    image: "images/robe-luxo.jpg",
     tag: "Exclusivo"
   },
   {
-    id: "fem-6",
+    id: "fem-7",
     name: "Kit 3 Calcinhas Invisíveis Corte a Laser",
     category: "Feminino",
     detail: "Não marca sob vestidos e calças finas, toque segunda pele",
     price: 74.90,
-    image: "https://images.unsplash.com/photo-1582533561751-ef6f6ab93a2e?auto=format&fit=crop&w=650&q=80",
+    image: "images/kit-calcinhas.jpg",
     tag: "Mais Vendido"
   },
 
   // --- MASCULINO ---
   {
     id: "masc-1",
-    name: "Pijama Longo Classic Confort",
+    name: "Kit 3 Cuecas Boxer Cotton Premium",
     category: "Masculino",
-    detail: "Algodão premium respirável, caimento solto e térmico",
-    price: 159.90,
-    image: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=650&q=80",
-    tag: "Destaque"
+    detail: "Algodão com elastano, forro duplo e elástico macio",
+    price: 89.90,
+    image: "images/cuecas-boxer.jpg",
+    tag: "Mais Vendido"
   },
   {
     id: "masc-2",
@@ -72,17 +81,17 @@ const initialProducts = [
     category: "Masculino",
     detail: "Gola colarinho com botões frontais e cós elástico com cordão",
     price: 139.90,
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=650&q=80",
+    image: "images/pijama-americano.jpg",
     tag: "Novo"
   },
   {
     id: "masc-3",
-    name: "Kit 3 Cuecas Boxer Cotton Premium",
+    name: "Pijama Longo Classic Confort",
     category: "Masculino",
-    detail: "Algodão com elastano, forro duplo e elástico macio",
-    price: 89.90,
-    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=650&q=80",
-    tag: "Essencial"
+    detail: "Algodão premium respirável, caimento solto e térmico",
+    price: 159.90,
+    image: "images/pijama-longo-masculino.jpg",
+    tag: "Destaque"
   },
   {
     id: "masc-4",
@@ -90,7 +99,7 @@ const initialProducts = [
     category: "Masculino",
     detail: "Perfeita para relaxar em casa com elegância e frescor",
     price: 79.90,
-    image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=650&q=80",
+    image: "images/camiseta-loungewear.jpg",
     tag: "Básico"
   },
 
@@ -101,7 +110,7 @@ const initialProducts = [
     category: "Infantil",
     detail: "100% algodão hipoalergênico com estampa delicada",
     price: 79.90,
-    image: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=650&q=80",
+    image: "images/pijama-infantil.jpg",
     tag: "Destaque"
   },
   {
@@ -110,7 +119,7 @@ const initialProducts = [
     category: "Infantil",
     detail: "Tecido levinho, super macio para noites de descanso feliz",
     price: 69.90,
-    image: "https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?auto=format&fit=crop&w=650&q=80",
+    image: "images/shortdoll-juvenil.jpg",
     tag: "Queridinho"
   },
   {
@@ -119,7 +128,7 @@ const initialProducts = [
     category: "Infantil",
     detail: "Proteção térmica aconchegante com zíper protegido",
     price: 94.90,
-    image: "https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=650&q=80",
+    image: "images/macacao-infantil.jpg",
     tag: "Novo"
   },
   {
@@ -128,7 +137,7 @@ const initialProducts = [
     category: "Infantil",
     detail: "Elásticos delicados que não marcam e garantem liberdade",
     price: 59.90,
-    image: "https://images.unsplash.com/photo-1471286174890-9c112ffca56a?auto=format&fit=crop&w=650&q=80",
+    image: "images/pecas-intimas-kids.jpg",
     tag: "Essencial"
   },
 
@@ -139,7 +148,7 @@ const initialProducts = [
     category: "Moda Praia",
     detail: "Tecido texturizado com proteção solar UV50+ e forro duplo",
     price: 149.90,
-    image: "https://images.unsplash.com/photo-1576426863848-c21f53c60b19?auto=format&fit=crop&w=650&q=80",
+    image: "images/biquini-cortininha.jpg",
     tag: "Destaque"
   },
   {
@@ -148,7 +157,7 @@ const initialProducts = [
     category: "Moda Praia",
     detail: "Efeito modelador elegante que também pode ser usado como body",
     price: 179.90,
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=650&q=80",
+    image: "images/maio-transpassado.jpg",
     tag: "Exclusivo"
   },
   {
@@ -157,7 +166,7 @@ const initialProducts = [
     category: "Moda Praia",
     detail: "Caimento arejado e sofisticado com amarração na cintura",
     price: 139.90,
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=650&q=80",
+    image: "images/saida-praia.jpg",
     tag: "Novo"
   },
   {
@@ -166,7 +175,7 @@ const initialProducts = [
     category: "Moda Praia",
     detail: "Secagem ultra rápida, forro anatômico e cordão interno",
     price: 89.90,
-    image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=650&q=80",
+    image: "images/sunga-boxer.jpg",
     tag: "Verão 2026"
   }
 ];
@@ -174,8 +183,20 @@ const initialProducts = [
 // Disponibiliza produtos iniciais globalmente
 window.defaultProducts = initialProducts;
 
-// Carrega produtos (localStorage > fallback inicial)
-let products = JSON.parse(localStorage.getItem("mimo_custom_products") || "null") || [...initialProducts];
+// Carrega produtos (localStorage > fallback inicial atualizado)
+const CATALOG_VERSION = "v3-exact-images";
+const savedVersion = localStorage.getItem("mimo_catalog_version");
+let savedProducts = null;
+
+if (savedVersion === CATALOG_VERSION) {
+  try {
+    savedProducts = JSON.parse(localStorage.getItem("mimo_custom_products") || "null");
+  } catch (e) {}
+}
+
+let products = (savedProducts && savedProducts.length > 0) ? savedProducts : [...initialProducts];
+localStorage.setItem("mimo_catalog_version", CATALOG_VERSION);
+localStorage.setItem("mimo_custom_products", JSON.stringify(products));
 
 const WHATSAPP_PHONE = "5561982378130";
 

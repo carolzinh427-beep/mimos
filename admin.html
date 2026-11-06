@@ -658,11 +658,14 @@ CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WI
       let products = [];
 
       function loadAdminProducts() {
+        const version = localStorage.getItem("mimo_catalog_version");
         const stored = localStorage.getItem("mimo_custom_products");
-        if (stored) {
+        if (stored && version === "v3-exact-images") {
           products = JSON.parse(stored);
         } else if (window.defaultProducts) {
           products = [...window.defaultProducts];
+          localStorage.setItem("mimo_catalog_version", "v3-exact-images");
+          localStorage.setItem("mimo_custom_products", JSON.stringify(products));
         } else {
           products = [];
         }
