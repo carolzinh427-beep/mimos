@@ -1,6 +1,6 @@
-# Mimos Íntimos — Catálogo
+# Mimo Íntimos — Catálogo
 
-Catálogo responsivo da Mimos Íntimos, com estética roxa, branca e off-white, navbar flutuante glassmórfica e atalhos de contato.
+Catálogo responsivo da Mimo Íntimos, com estética roxa, branca e off-white, navbar flutuante glassmórfica e atalhos de contato.
 
 ## Abrir
 
