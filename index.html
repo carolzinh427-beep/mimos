@@ -51,23 +51,97 @@
     </header>
 
     <main id="inicio">
-      <!-- SESSÃO 1: HERO (Fundo Bege com Lingerie & Sombra) -->
-      <section class="section-wrapper bg-beige hero-wrapper">
-        <div class="hero-bg-photo"></div>
-        <div class="hero-bg-shadow"></div>
-        <div class="hero section-shell">
-          <div class="hero-copy">
-            <p class="eyebrow">Conforto que abraça você</p>
-            <h1>Peças para viver<br /><span>do seu jeito</span></h1>
-            <p class="hero-text">Lingerie, pijamas e moda íntima escolhidos com carinho para acompanhar todos os seus momentos</p>
-            <div class="hero-actions"><a class="button button-primary" href="#catalogo">Explorar catálogo <span>↗</span></a><a class="text-link" href="https://wa.me/5561982378130" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a></div>
+      <!-- SESSÃO 1: HERO SLIDER CAROUSEL (Coleções de Verão, Novidades, Queima de Estoque) -->
+      <section class="section-wrapper bg-beige hero-slider-wrapper" id="hero-carousel" aria-label="Destaques Mimo Íntimo">
+        <div class="hero-slider" id="hero-slider">
+
+          <!-- SLIDE 1: Coleções de Verão -->
+          <div class="hero-slide active" data-index="0">
+            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content section-shell">
+              <div class="hero-copy">
+                <p class="eyebrow"><span class="badge-tag">Coleção Verão 2026</span></p>
+                <h1>Leveza, frescor e sol<br /><span>para o seu verão</span></h1>
+                <p class="hero-text">Biquínis, maiôs e saídas de praia em tecidos nobres com proteção UV e modelagem pensada para o seu bem-estar</p>
+                <div class="hero-actions">
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Moda Praia">Ver Moda Praia <span>↗</span></a>
+                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20conhecer%20a%20Coleção%20de%20Verão%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
+                </div>
+              </div>
+              <div class="hero-slide-badge">
+                <div class="slide-badge-card">
+                  <span class="badge-icon">☼</span>
+                  <strong>Moda Praia & Sol</strong>
+                  <small>Biquínis, maiôs & proteção UV50+</small>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="hero-art" aria-label="Coleção Mimo Íntimo">
-            <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-            <div class="art-card art-card-back"><span>coleção</span><strong>essencial</strong></div>
-            <div class="art-card art-card-front"><div class="art-ribbon">Mimo Íntimo</div><div class="art-silhouette"></div><div class="art-caption"><span>novo olhar</span><strong>para o conforto</strong></div></div>
-            <div class="floating-note note-one">feito para você <span>♡</span></div>
+
+          <!-- SLIDE 2: Novidades -->
+          <div class="hero-slide" data-index="1">
+            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content section-shell">
+              <div class="hero-copy">
+                <p class="eyebrow"><span class="badge-tag">Novidades Exclusivas</span></p>
+                <h1>Conforto e elegância<br /><span>que abraçam você</span></h1>
+                <p class="hero-text">Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego</p>
+                <div class="hero-actions">
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Feminino">Explorar Novidades <span>↗</span></a>
+                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20ver%20as%20novidades%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
+                </div>
+              </div>
+              <div class="hero-slide-badge">
+                <div class="slide-badge-card">
+                  <span class="badge-icon">♡</span>
+                  <strong>Rendas & Cetim</strong>
+                  <small>Lançamentos da semana com toque suave</small>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- SLIDE 3: Queima de Estoque -->
+          <div class="hero-slide" data-index="2">
+            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content section-shell">
+              <div class="hero-copy">
+                <p class="eyebrow"><span class="badge-tag badge-tag-sale">Oportunidade Especial</span></p>
+                <h1>Queima de estoque<br /><span>com até 40% OFF</span></h1>
+                <p class="hero-text">Peças selecionadas, conjuntos de lingerie e pijamas com descontos especiais enquanto durarem os estoques</p>
+                <div class="hero-actions">
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Todos">Aproveitar Ofertas <span>↗</span></a>
+                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Quero%20aproveitar%20a%20Queima%20de%20Estoque%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Pedir no WhatsApp <span>→</span></a>
+                </div>
+              </div>
+              <div class="hero-slide-badge">
+                <div class="slide-badge-card slide-badge-sale">
+                  <span class="badge-icon">✦</span>
+                  <strong>Até 40% OFF</strong>
+                  <small>Últimas unidades com preço especial</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Controles de Navegação -->
+        <button class="hero-nav-btn hero-nav-prev" id="hero-prev" type="button" aria-label="Slide anterior">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button class="hero-nav-btn hero-nav-next" id="hero-next" type="button" aria-label="Próximo slide">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+
+        <!-- Indicadores / Abas de Slides -->
+        <div class="hero-indicators" id="hero-indicators">
+          <button class="hero-dot active" data-slide="0" aria-label="Ir para Coleção Verão"><span class="dot-bar"></span><span class="dot-label">Coleções de Verão</span></button>
+          <button class="hero-dot" data-slide="1" aria-label="Ir para Novidades"><span class="dot-bar"></span><span class="dot-label">Novidades</span></button>
+          <button class="hero-dot" data-slide="2" aria-label="Ir para Queima de Estoque"><span class="dot-bar"></span><span class="dot-label">Queima de Estoque</span></button>
         </div>
       </section>
 

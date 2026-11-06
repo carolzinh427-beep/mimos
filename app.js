@@ -271,18 +271,31 @@ chips.forEach((chip) => {
   });
 });
 
+// Função reutilizável para aplicar filtro de categoria e rolar suavemente para o catálogo
+function selectCategoryFilter(cat) {
+  activeFilter = cat || "Todos";
+  visibleCount = 8;
+  chips.forEach((item) => item.classList.toggle("active", item.dataset.filter === activeFilter));
+  renderProducts();
+  const catalogEl = document.querySelector("#catalogo");
+  if (catalogEl) {
+    catalogEl.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+// Botoes do Hero Slider que filtram categorias
+document.querySelectorAll(".hero-btn-cat").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const filter = btn.dataset.filter || "Todos";
+    selectCategoryFilter(filter);
+  });
+});
+
 // Clique nas Categorias da barra superior para filtrar direto
 categoryCards.forEach((card) => {
   card.addEventListener("click", () => {
-    const cat = card.dataset.category;
-    activeFilter = cat;
-    visibleCount = 8;
-    chips.forEach((item) => item.classList.toggle("active", item.dataset.filter === cat));
-    renderProducts();
-    const catalogEl = document.querySelector("#catalogo");
-    if (catalogEl) {
-      catalogEl.scrollIntoView({ behavior: "smooth" });
-    }
+    selectCategoryFilter(card.dataset.category);
   });
 });
 
@@ -413,7 +426,123 @@ async function syncFromSupabase() {
   }
 }
 
+// =================================================================
+// HERO SLIDER CAROUSEL (Coleções de Verão, Novidades, Queima de Estoque)
+// =================================================================
+function initHeroSlider() {
+  const slider = document.querySelector("#hero-slider");
+  if (!slider) return;
+
+  const slides = [...slider.querySelectorAll(".hero-slide")];
+  const dots = [...document.querySelectorAll(".hero-dot")];
+  const prevBtn = document.querySelector("#hero-prev");
+  const nextBtn = document.querySelector("#hero-next");
+  const heroWrapper = document.querySelector(".hero-slider-wrapper");
+
+  if (slides.length <= 1) return;
+
+  let currentSlide = 0;
+  let autoSlideTimer = null;
+  const SLIDE_DURATION = 5000; // 5 segundos por slide
+
+  function showSlide(index) {
+    if (index >= slides.length) currentSlide = 0;
+    else if (index < 0) currentSlide = slides.length - 1;
+    else currentSlide = index;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("active", i === currentSlide);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentSlide);
+    });
+  }
+
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    autoSlideTimer = setInterval(nextSlide, SLIDE_DURATION);
+  }
+
+  function stopAutoPlay() {
+    if (autoSlideTimer) {
+      clearInterval(autoSlideTimer);
+      autoSlideTimer = null;
+    }
+  }
+
+  // Eventos de clique nas setas
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      nextSlide();
+      startAutoPlay();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      prevSlide();
+      startAutoPlay();
+    });
+  }
+
+  // Eventos de clique nos indicadores (dots / abas)
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const targetIndex = parseInt(dot.dataset.slide, 10);
+      if (!isNaN(targetIndex)) {
+        showSlide(targetIndex);
+        startAutoPlay();
+      }
+    });
+  });
+
+  // Pausar rotação ao passar o mouse por cima
+  if (heroWrapper) {
+    heroWrapper.addEventListener("mouseenter", stopAutoPlay);
+    heroWrapper.addEventListener("mouseleave", startAutoPlay);
+  }
+
+  // Suporte a gestos de arrasto / swipe no celular
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slider.addEventListener("touchstart", (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchStartX = e.changedTouches[0].screenX;
+    }
+    stopAutoPlay();
+  }, { passive: true });
+
+  slider.addEventListener("touchend", (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        if (diff < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }
+    startAutoPlay();
+  }, { passive: true });
+
+  // Inicia rotação automática
+  startAutoPlay();
+}
+
 // Inicialização
 updateFavoritesUI();
 renderProducts();
 syncFromSupabase();
+initHeroSlider();
