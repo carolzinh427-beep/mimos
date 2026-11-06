@@ -1,20 +1,20 @@
 :root {
   --purple: #6b3b8f;
   --purple-dark: #3b1e59;
+  --purple-deep: #28123d;
   --purple-light: #9b6bc0;
   --purple-soft: #ede4f3;
   --purple-glow: rgba(107, 59, 143, 0.18);
   --ink: #281b2e;
   --muted: #7f7483;
-  --off: #faf7f5;
-  --white: #ffffff;
-  --line: rgba(72, 43, 89, 0.12);
-  --glass-bg: rgba(255, 255, 255, 0.68);
+  --bg-beige: #fbf7f2;
+  --bg-white: #ffffff;
+  --line: rgba(72, 43, 89, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.72);
   --glass-border: rgba(255, 255, 255, 0.85);
-  --shadow: 0 18px 45px rgba(66, 35, 84, 0.08);
-  --shadow-hover: 0 22px 50px rgba(66, 35, 84, 0.15);
+  --shadow: 0 16px 40px rgba(66, 35, 84, 0.07);
+  --shadow-hover: 0 20px 45px rgba(66, 35, 84, 0.13);
   --green-wa: #25d366;
-  --green-wa-dark: #128c7e;
 }
 
 * {
@@ -27,7 +27,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--off);
+  background: var(--bg-beige);
   color: var(--ink);
   font-family: "DM Sans", sans-serif;
   overflow-x: hidden;
@@ -39,28 +39,43 @@ body {
   border-radius: 50%;
   filter: blur(80px);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 .page-glow-one {
-  width: 620px;
-  height: 620px;
-  top: -260px;
-  right: -180px;
-  background: radial-gradient(circle, rgba(198, 161, 215, 0.32), transparent 70%);
+  width: 580px;
+  height: 580px;
+  top: -240px;
+  right: -160px;
+  background: radial-gradient(circle, rgba(198, 161, 215, 0.25), transparent 70%);
 }
 
 .page-glow-two {
-  width: 560px;
-  height: 560px;
-  bottom: -240px;
-  left: -280px;
-  background: radial-gradient(circle, rgba(219, 190, 231, 0.28), transparent 70%);
+  width: 520px;
+  height: 520px;
+  bottom: -220px;
+  left: -240px;
+  background: radial-gradient(circle, rgba(219, 190, 231, 0.22), transparent 70%);
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Intercalação de Sessões (Bege / Branco) */
+.section-wrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.bg-beige {
+  background-color: var(--bg-beige);
+}
+
+.bg-white {
+  background-color: var(--bg-white);
 }
 
 .section-shell {
@@ -98,7 +113,7 @@ a {
 .navbar {
   width: min(1160px, calc(100% - 16px));
   margin: 0 auto;
-  height: 68px;
+  height: 70px;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -108,7 +123,7 @@ a {
   transition: all 0.3s ease;
 }
 
-/* Real Liquid Glass Panel */
+/* Liquid Frosted Glass Panel */
 .glass-panel {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -124,38 +139,12 @@ a {
   gap: 10px;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-  color: #fff;
-  font-family: Georgia, serif;
-  font-size: 17px;
-  font-style: italic;
-  box-shadow: 0 4px 12px var(--purple-glow);
-}
-
-.brand-copy {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.brand-copy strong {
-  font-size: 16px;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-}
-
-.brand-copy em {
-  font-family: "Playfair Display", serif;
-  font-size: 14px;
-  color: var(--purple);
-  font-style: normal;
-  margin-top: 2px;
+.brand-logo {
+  height: 44px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  display: block;
 }
 
 .nav-links {
@@ -259,10 +248,10 @@ a {
   margin-top: 8px;
 }
 
-/* Hero Section */
+/* SESSÃO 1: HERO */
 .hero {
   min-height: 520px;
-  padding: 80px 4% 60px;
+  padding: 80px 0 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -466,7 +455,7 @@ a {
 
 .floating-note {
   position: absolute;
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
@@ -487,16 +476,17 @@ a {
   margin-left: 5px;
 }
 
-/* Category Interactive Strip */
+/* SESSÃO 2: CATEGORIAS (Fundo Branco) */
 .category-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 22px;
-  padding: 20px 24px;
+  padding: 24px 28px;
   gap: 16px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 30px rgba(50, 30, 62, 0.04);
+  margin: 50px 0;
 }
 
 .category-card {
@@ -508,7 +498,7 @@ a {
   padding-right: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  padding: 8px 12px 8px 4px;
+  padding: 10px 14px 10px 6px;
   border-radius: 14px;
 }
 
@@ -552,9 +542,9 @@ a {
   margin-top: 2px;
 }
 
-/* Catalog Section */
+/* SESSÃO 3: CATÁLOGO (Fundo Bege) */
 .catalog {
-  padding: 90px 0 80px;
+  padding: 85px 0 95px;
 }
 
 .section-heading {
@@ -659,7 +649,6 @@ a {
   border-color: rgba(107, 59, 143, 0.2);
 }
 
-/* Product Image & Badges */
 .product-image-wrap {
   height: 290px;
   position: relative;
@@ -723,7 +712,6 @@ a {
   color: #d63384;
 }
 
-/* Product Info */
 .product-info {
   padding: 16px 16px 18px;
   display: flex;
@@ -762,7 +750,6 @@ a {
   flex: 1;
 }
 
-/* Product Pricing & WhatsApp Button */
 .product-bottom {
   display: flex;
   align-items: center;
@@ -829,9 +816,9 @@ a {
   color: var(--muted);
 }
 
-/* About Section */
+/* SESSÃO 4: SOBRE / A LOJA (Fundo Branco) */
 .about {
-  padding-bottom: 90px;
+  padding: 90px 0;
 }
 
 .about-card {
@@ -858,12 +845,12 @@ a {
   justify-self: end;
 }
 
-/* Contact Section */
+/* SESSÃO 5: CONTATO (Fundo Bege) */
 .contact {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 70px;
-  padding: 80px 0 100px;
+  padding: 95px 0 110px;
 }
 
 .contact h2 {
@@ -881,24 +868,25 @@ a {
 .contact-cards {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .contact-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 18px 20px;
+  padding: 18px 22px;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(50, 30, 62, 0.03);
 }
 
 .contact-card:hover {
-  transform: translateX(4px);
+  transform: translateX(5px);
   border-color: rgba(107, 59, 143, 0.35);
-  box-shadow: 0 6px 20px rgba(50, 30, 62, 0.05);
+  box-shadow: 0 8px 24px rgba(50, 30, 62, 0.08);
 }
 
 .contact-card > div {
@@ -911,10 +899,12 @@ a {
 .contact-card small {
   font-size: 10px;
   color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .contact-card strong {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .contact-card > span:last-child {
@@ -924,18 +914,49 @@ a {
 .contact-symbol {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: var(--purple-soft);
-  color: var(--purple);
-  font-size: 18px;
+  flex-shrink: 0;
 }
 
-/* Footer */
+.contact-symbol-whatsapp {
+  background: #25d366;
+  color: #fff;
+}
+
+.contact-symbol-phone {
+  background: var(--purple-soft);
+  color: var(--purple);
+}
+
+.contact-symbol-instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+}
+
+/* RODAPÉ ROXO */
+.footer-purple {
+  background: linear-gradient(180deg, #442266, #2d1344);
+  color: #ffffff;
+  padding: 60px 0 32px;
+  margin-top: 0;
+  position: relative;
+  z-index: 10;
+}
+
 .footer {
-  border-top: 1px solid var(--line);
-  padding: 40px 0 28px;
+  padding: 0;
+}
+
+.brand-footer {
+  display: inline-block;
+}
+
+.footer-logo {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer-top {
@@ -946,29 +967,41 @@ a {
 }
 
 .footer-top > p {
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
   line-height: 1.6;
   margin: 0;
 }
 
 .footer-social {
   display: flex;
-  gap: 24px;
+  gap: 20px;
+}
+
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #e4c7f5;
   font-size: 12px;
-  color: var(--purple);
   font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.footer-social a:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .footer-bottom {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  border-top: 1px solid var(--line);
-  margin-top: 32px;
-  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  margin-top: 36px;
+  padding-top: 22px;
   font-size: 11px;
-  color: #9b919e;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Floating WhatsApp Button */
@@ -1196,6 +1229,16 @@ a {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+  .footer-top {
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1208,9 +1251,12 @@ a {
   }
   .navbar {
     width: 100%;
-    height: 58px;
+    height: 60px;
     padding: 0 16px;
     border-radius: 18px;
+  }
+  .brand-logo {
+    height: 36px;
   }
   .nav-links {
     display: none;
@@ -1231,6 +1277,7 @@ a {
   .category-strip {
     grid-template-columns: 1fr;
     padding: 16px;
+    margin: 30px 0;
   }
   .category-card {
     border-right: 0;

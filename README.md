@@ -1,6 +1,6 @@
-# Mimo Íntimos — Catálogo
+# Mimo Íntimo — Catálogo
 
-Catálogo responsivo da Mimo Íntimos, com estética roxa, branca e off-white, navbar flutuante glassmórfica e atalhos de contato.
+Catálogo responsivo da Mimo Íntimo, com identidade visual oficial, sessões intercaladas em bege e branco, rodapé roxo e atalhos de contato via WhatsApp.
 
 ## Abrir
 

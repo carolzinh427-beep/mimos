@@ -1,4 +1,4 @@
-// Catálogo Mimo Íntimos - Produtos com Sessões, Fotos Reais e Valores
+// Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
 const products = [
   // --- FEMININO ---
   {
@@ -202,7 +202,7 @@ function formatPrice(val) {
 
 // Gera URL do WhatsApp para pedir um item
 function getWaProductUrl(product) {
-  const text = `Olá! Vi no catálogo da Mimo Íntimos e gostaria de informações sobre:\n*${product.name}* (${formatPrice(product.price)})\nCategoria: ${product.category}\nPodem me enviar cores e tamanhos disponíveis?`;
+  const text = `Olá! Vi no catálogo da Mimo Íntimo e gostaria de informações sobre:\n*${product.name}* (${formatPrice(product.price)})\nCategoria: ${product.category}\nPodem me enviar cores e tamanhos disponíveis?`;
   return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
 }
 
@@ -315,7 +315,7 @@ function updateFavoritesUI() {
 
     // Formata mensagem para enviar todos os favoritos via WhatsApp
     const listText = favProducts.map((p) => `• ${p.name} (${formatPrice(p.price)})`).join("\n");
-    const fullText = `Olá! Salvei os seguintes itens no catálogo da Mimo Íntimos e gostaria de consultar tamanhos e cores:\n\n${listText}\n\nComo podemos proceder?`;
+    const fullText = `Olá! Salvei os seguintes itens no catálogo da Mimo Íntimo e gostaria de consultar tamanhos e cores:\n\n${listText}\n\nComo podemos proceder?`;
     sendFavsWa.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(fullText)}`;
   }
 }
