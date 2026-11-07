@@ -1147,6 +1147,16 @@
         modal.classList.remove("open");
       });
 
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.remove("open");
+        });
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal) modal.classList.remove("open");
+      });
+
       window.editProduct = function (id) {
         const p = products.find((item) => item.id === id);
         if (!p) return;

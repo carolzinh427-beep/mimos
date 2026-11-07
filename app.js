@@ -518,6 +518,24 @@ window.closePixPopups = function() {
   document.getElementById("pix-qrcode-popup")?.classList.remove("open");
 };
 
+// Fechar ao clicar fora ou pressionar ESC
+["pix-stock-popup", "pix-qrcode-popup"].forEach((id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("click", (e) => {
+      if (e.target === el) window.closePixPopups();
+    });
+  }
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    window.closePixPopups();
+    if (typeof closeProductModal === "function") closeProductModal();
+    if (typeof toggleDrawer === "function") toggleDrawer(false);
+  }
+});
+
 window.copyPixKey = function() {
   const keyInput = document.getElementById("pix-key-val");
   if (!keyInput) return;
