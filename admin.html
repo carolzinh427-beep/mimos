@@ -388,19 +388,23 @@
       <div class="login-card">
         <img src="logo.png" alt="Mimo Íntimo" />
         <h2>Acesso Administrativo</h2>
-        <p>Digite sua senha para gerenciar produtos, imagens e integrações</p>
-        <div id="login-alert" class="alert alert-danger">Senha incorreta</div>
+        <p>Digite seu e-mail e senha para gerenciar produtos, imagens e catálogo</p>
+        <div id="login-alert" class="alert alert-danger">E-mail ou senha incorretos</div>
         <form id="login-form">
           <div class="input-group">
+            <label for="admin-email">E-mail de Acesso</label>
+            <input type="email" id="admin-email" placeholder="Nunes.501@hotmail.com" required autofocus />
+          </div>
+          <div class="input-group">
             <label for="admin-pass">Senha de Acesso</label>
-            <input type="password" id="admin-pass" placeholder="Digite sua senha" required autofocus />
+            <input type="password" id="admin-pass" placeholder="Digite sua senha" required />
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 13px">
             Entrar no Painel
           </button>
         </form>
         <small style="display: block; margin-top: 18px; font-size: 11px; color: var(--muted)">
-          Senha padrão inicial: <strong>mimo2026</strong>
+          Acesso padrão: <strong>Nunes.501@hotmail.com</strong>
         </small>
       </div>
     </div>
@@ -515,8 +519,10 @@
     </div>
 
     <script>
-      // Senha Padrão
-      const DEFAULT_PASSWORD = "mimo2026";
+      // Credenciais Padrão
+      const DEFAULT_EMAIL = "nunes.501@hotmail.com";
+      const DEFAULT_PASSWORD = "Mimo2026";
+      let adminEmail = (localStorage.getItem("mimo_admin_email") || DEFAULT_EMAIL).toLowerCase();
       let adminPassword = localStorage.getItem("mimo_admin_pass") || DEFAULT_PASSWORD;
 
       // Estado de Autenticação
@@ -524,6 +530,7 @@
       const adminMain = document.querySelector("#admin-main");
       const adminHeader = document.querySelector("#admin-header");
       const loginForm = document.querySelector("#login-form");
+      const loginEmail = document.querySelector("#admin-email");
       const loginPass = document.querySelector("#admin-pass");
       const loginAlert = document.querySelector("#login-alert");
       const logoutBtn = document.querySelector("#logout-btn");
@@ -543,7 +550,14 @@
 
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        if (loginPass.value === adminPassword) {
+        const inputEmail = loginEmail.value.trim().toLowerCase();
+        const inputPass = loginPass.value;
+
+        // Aceita tanto a senha nova Mimo2026 quanto mimo2026
+        const isPassValid = (inputPass === adminPassword) || (inputPass.toLowerCase() === adminPassword.toLowerCase());
+        const isEmailValid = (inputEmail === adminEmail);
+
+        if (isEmailValid && isPassValid) {
           sessionStorage.setItem("mimo_logged_in", "true");
           loginAlert.style.display = "none";
           checkAuth();
