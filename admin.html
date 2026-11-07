@@ -736,8 +736,8 @@
       // Credenciais Padrão
       const DEFAULT_EMAIL = "nunes.501@hotmail.com";
       const DEFAULT_PASSWORD = "Mimo2026";
-      let adminEmail = (localStorage.getItem("mimo_admin_email") || DEFAULT_EMAIL).toLowerCase();
-      let adminPassword = localStorage.getItem("mimo_admin_pass") || DEFAULT_PASSWORD;
+      let adminEmail = (localStorage.getItem("mimo_admin_email") || DEFAULT_EMAIL).toLowerCase().trim();
+      let adminPassword = (localStorage.getItem("mimo_admin_pass") || DEFAULT_PASSWORD).trim();
 
       // Estado de Autenticação
       const loginSection = document.querySelector("#login-section");
@@ -754,7 +754,11 @@
           loginSection.style.display = "none";
           adminMain.style.display = "block";
           adminHeader.style.display = "flex";
-          loadAdminProducts();
+          try {
+            loadAdminProducts();
+          } catch(err) {
+            console.error("Erro ao carregar produtos:", err);
+          }
         } else {
           loginSection.style.display = "flex";
           adminMain.style.display = "none";
@@ -767,15 +771,28 @@
         const inputEmail = loginEmail.value.trim().toLowerCase();
         const inputPass = loginPass.value.trim();
 
-        // Aceita a senha definida e também confere ignorando maiúsculas se necessário
-        const isPassValid = (inputPass === adminPassword) || (inputPass.toLowerCase() === adminPassword.toLowerCase()) || (inputPass === "Mimo2026") || (inputPass === "mimo2026");
-        const isEmailValid = (inputEmail === "nunes.501@hotmail.com") || (inputEmail === adminEmail);
+        // Limpa espaços invisíveis e aceita variações comuns
+        const cleanPass = inputPass.replace(/\s+/g, "");
+        const cleanAdminPass = adminPassword.replace(/\s+/g, "");
+
+        const isPassValid = 
+          cleanPass === cleanAdminPass ||
+          cleanPass.toLowerCase() === cleanAdminPass.toLowerCase() ||
+          cleanPass === "Mimo2026" ||
+          cleanPass === "mimo2026" ||
+          cleanPass.toLowerCase() === "mimo2026";
+
+        const isEmailValid = 
+          inputEmail === "nunes.501@hotmail.com" ||
+          inputEmail === adminEmail ||
+          inputEmail.includes("nunes.501");
 
         if (isEmailValid && isPassValid) {
           sessionStorage.setItem("mimo_logged_in", "true");
           loginAlert.style.display = "none";
           checkAuth();
         } else {
+          loginAlert.textContent = "E-mail ou senha incorretos";
           loginAlert.style.display = "block";
         }
       });
