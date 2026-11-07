@@ -324,6 +324,45 @@
         color: var(--muted);
       }
 
+      .preset-btn {
+        background: #f1e9f7;
+        color: var(--purple-dark);
+        border: 1px solid rgba(107, 59, 143, 0.2);
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 9px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .preset-btn:hover {
+        background: var(--purple);
+        color: #fff;
+      }
+
+      .badge-esgotado {
+        background: #dc3545;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .admin-variants-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 11px;
+        color: var(--muted);
+        background: #fdfbfe;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(72, 43, 89, 0.06);
+      }
+
       /* Settings Cards */
       .settings-card {
         background: #fff;
@@ -503,8 +542,41 @@
           </div>
 
           <div class="input-group">
+            <label for="prod-colors">Cores Disponíveis (separadas por vírgula)</label>
+            <input type="text" id="prod-colors" placeholder="Ex: Preto, Branco, Rosé, Nude, Vinho" />
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px">
+              <span style="font-size: 11px; color: var(--muted)">Sugestões rápidas:</span>
+              <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Branco, Nude')">+ Básico</button>
+              <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Rosé, Vinho, Vermelho')">+ Romântico</button>
+              <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Cinza Mescla, Azul Marinho')">+ Casual</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="prod-sizes">Tamanhos / Numeração Disponíveis</label>
+            <input type="text" id="prod-sizes" placeholder="Ex: P, M, G, GG ou 34 a 39" />
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px">
+              <span style="font-size: 11px; color: var(--muted)">Inserir atalho:</span>
+              <button type="button" class="preset-btn" onclick="setSizesPreset('PP, P, M, G, GG')">Padrão: PP ao GG</button>
+              <button type="button" class="preset-btn" onclick="setSizesPreset('P, M, G, GG')">P, M, G, GG</button>
+              <button type="button" class="preset-btn" onclick="setSizesPreset('34, 35, 36, 37, 38, 39')">Meias/Calçados: 34 a 39</button>
+              <button type="button" class="preset-btn" onclick="setSizesPreset('Tamanho Único')">Tamanho Único</button>
+            </div>
+          </div>
+
+          <div class="input-group">
             <label for="prod-tag">Etiqueta de Destaque</label>
-            <input type="text" id="prod-tag" placeholder="Ex: Destaque, Novo, Queridinho" value="Destaque" />
+            <input type="text" id="prod-tag" placeholder="Ex: Destaque, Novo, Queridinho, Luxo" value="Destaque" />
+          </div>
+
+          <div class="input-group" style="background: #faf7f8; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); margin-top: 8px">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; font-weight: 700; color: var(--ink)">
+              <input type="checkbox" id="prod-esgotado" style="width: 18px; height: 18px; accent-color: var(--danger); cursor: pointer" />
+              <span>Marcar peça como <strong style="color: var(--danger)">ESGOTADO</strong></span>
+            </label>
+            <small style="display: block; margin-top: 4px; font-size: 11px; color: var(--muted); margin-left: 28px">
+              A peça aparecerá com aviso vermelho de "ESGOTADO" no catálogo e o botão de pedido será desativado.
+            </small>
           </div>
 
           <div style="display: flex; gap: 10px; margin-top: 24px">
@@ -644,17 +716,31 @@
         }
 
         grid.innerHTML = products.map((p) => `
-          <div class="product-item">
+          <div class="product-item" style="${p.esgotado ? 'opacity: 0.85; border-color: rgba(220, 53, 69, 0.4);' : ''}">
             <div class="product-item-img">
               <img src="${p.image}" alt="${p.name}" />
               <span style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px">${p.category}</span>
+              ${p.esgotado ? '<span style="position: absolute; top: 10px; right: 10px;" class="badge-esgotado">ESGOTADO</span>' : ''}
             </div>
             <div class="product-item-body">
-              <strong>${p.name}</strong>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
+                <strong>${p.name}</strong>
+              </div>
               <p>${p.detail || ""}</p>
+              ${(p.colors || p.sizes) ? `
+                <div class="admin-variants-meta">
+                  ${p.colors ? `<div><strong>Cores:</strong> ${p.colors}</div>` : ''}
+                  ${p.sizes ? `<div><strong>Tamanhos:</strong> ${p.sizes}</div>` : ''}
+                </div>
+              ` : ''}
               <div class="product-item-meta">
-                <span class="product-item-price">R$ ${Number(p.price).toFixed(2).replace('.', ',')}</span>
+                <span class="product-item-price" style="${p.esgotado ? 'text-decoration: line-through; opacity: 0.7' : ''}">
+                  R$ ${Number(p.price).toFixed(2).replace('.', ',')}
+                </span>
                 <div class="product-item-actions">
+                  <button class="btn btn-outline" onclick="toggleEsgotado('${p.id}')" title="Alternar status esgotado">
+                    ${p.esgotado ? 'Reativar' : 'Esgotar'}
+                  </button>
                   <button class="btn btn-outline" onclick="editProduct('${p.id}')">Editar</button>
                   <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Excluir</button>
                 </div>
@@ -701,10 +787,34 @@
         }
       });
 
+      // Funções auxiliares para atalhos de cores e tamanhos
+      window.addColorsPreset = function (colors) {
+        const input = document.getElementById("prod-colors");
+        if (!input.value.trim()) {
+          input.value = colors;
+        } else {
+          input.value += `, ${colors}`;
+        }
+      };
+
+      window.setSizesPreset = function (sizes) {
+        document.getElementById("prod-sizes").value = sizes;
+      };
+
+      window.toggleEsgotado = function (id) {
+        const p = products.find((item) => item.id === id);
+        if (!p) return;
+        p.esgotado = !p.esgotado;
+        saveProducts();
+      };
+
       openAddBtn.addEventListener("click", () => {
         modalTitle.textContent = "Novo Produto";
         productForm.reset();
         document.getElementById("prod-id").value = "";
+        document.getElementById("prod-colors").value = "";
+        document.getElementById("prod-sizes").value = "";
+        document.getElementById("prod-esgotado").checked = false;
         currentImageData = "";
         previewImg.style.display = "none";
         previewPlaceholder.style.display = "block";
@@ -725,6 +835,9 @@
         document.getElementById("prod-detail").value = p.detail || "";
         document.getElementById("prod-price").value = p.price;
         document.getElementById("prod-tag").value = p.tag || "Destaque";
+        document.getElementById("prod-colors").value = p.colors || "";
+        document.getElementById("prod-sizes").value = p.sizes || "";
+        document.getElementById("prod-esgotado").checked = !!p.esgotado;
         currentImageData = p.image;
         if (p.image) {
           previewImg.src = p.image;
@@ -752,10 +865,23 @@
         const detail = document.getElementById("prod-detail").value.trim();
         const price = parseFloat(document.getElementById("prod-price").value) || 0;
         const tag = document.getElementById("prod-tag").value.trim() || "Destaque";
+        const colors = document.getElementById("prod-colors").value.trim();
+        const sizes = document.getElementById("prod-sizes").value.trim();
+        const esgotado = document.getElementById("prod-esgotado").checked;
         const image = currentImageData || "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80";
 
         const existingIndex = products.findIndex((p) => p.id === id);
-        const itemData = { id, name, category, detail, price, tag, image };
+        const itemData = { id, name, category, detail, price, tag, colors, sizes, esgotado, image };
+
+        if (existingIndex >= 0) {
+          products[existingIndex] = itemData;
+        } else {
+          products.unshift(itemData);
+        }
+
+        saveProducts();
+        modal.classList.remove("open");
+      });
 
         if (existingIndex >= 0) {
           products[existingIndex] = itemData;
