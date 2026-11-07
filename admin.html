@@ -662,6 +662,20 @@
           </div>
 
           <div class="input-group">
+            <label for="prod-brand">Marca / Linha</label>
+            <input type="text" id="prod-brand" list="brands-datalist" placeholder="Ex: Lupo, Loba, Lobinha, Mimo Íntimo" />
+            <datalist id="brands-datalist">
+              <option value="Lupo"></option>
+              <option value="Loba"></option>
+              <option value="Lobinha"></option>
+              <option value="Mimo Íntimo"></option>
+              <option value="De Chelles"></option>
+              <option value="Hope"></option>
+              <option value="Recco"></option>
+            </datalist>
+          </div>
+
+          <div class="input-group">
             <label for="prod-detail">Detalhes / Tecido</label>
             <textarea id="prod-detail" rows="2" placeholder="Ex: Toque de seda geladinho com renda antialérgica"></textarea>
           </div>
@@ -890,7 +904,9 @@
           <div class="product-item" style="${p.esgotado ? 'opacity: 0.85; border-color: rgba(220, 53, 69, 0.4);' : ''}">
             <div class="product-item-img">
               <img src="${p.image}" alt="${p.name}" />
-              <span style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9); font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px">${p.category}</span>
+              <span style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.95); font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 999px; box-shadow: 0 2px 6px rgba(0,0,0,0.08)">
+                ${p.brand ? `${p.brand} · ` : ''}${p.category}
+              </span>
               ${p.esgotado ? '<span style="position: absolute; top: 10px; right: 10px;" class="badge-esgotado">ESGOTADO</span>' : ''}
             </div>
             <div class="product-item-body">
