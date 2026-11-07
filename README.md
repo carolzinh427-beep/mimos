@@ -10,11 +10,12 @@ Abra `index.html` no navegador. Não há etapa de instalação para visualizar a
 
 - `index.html`: estrutura da página e informações comerciais.
 - `styles.css`: identidade visual, layout responsivo e componentes.
-- `app.js`: catálogo demonstrativo, filtros, busca, menu mobile e favoritos.
+- `app.js`: catálogo interativo, hero carousel de coleções, filtros, busca, menu mobile e favoritos.
+- `admin.html`: painel administrativo para gerenciamento de produtos, imagens e segurança.
 
-## Próxima etapa
+## Gerenciamento
 
-Os produtos atualmente usam dados demonstrativos para validar a experiência visual. A integração com Supabase deve substituir o array `products` em `app.js` por uma consulta à tabela de produtos e usar URLs do Supabase Storage para as imagens.
+O catálogo pode ser gerenciado diretamente pelo painel administrativo em `admin.html`, permitindo inclusão, edição, exclusão de peças e upload de fotos.
 
 ## Informações incluídas
 

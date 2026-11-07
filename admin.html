@@ -324,7 +324,7 @@
         color: var(--muted);
       }
 
-      /* Settings & Supabase Cards */
+      /* Settings Cards */
       .settings-card {
         background: #fff;
         border: 1px solid var(--line);
@@ -409,7 +409,6 @@
     <main class="container" id="admin-main" style="display: none">
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-products">📦 Produtos & Imagens</button>
-        <button class="tab-btn" data-tab="tab-supabase">⚡ Conexão Supabase</button>
         <button class="tab-btn" data-tab="tab-security">🔐 Senha & Segurança</button>
       </div>
 
@@ -428,63 +427,7 @@
         </div>
       </section>
 
-      <!-- ABA 2: SUPABASE -->
-      <section class="tab-panel" id="tab-supabase">
-        <div class="settings-card">
-          <h4>Integração com Supabase</h4>
-          <p>
-            Conecte seu projeto Supabase para armazenar a tabela de produtos e usar o Supabase Storage para uploads de imagens.
-          </p>
-
-          <div id="supabase-alert" class="alert alert-success"></div>
-
-          <form id="supabase-form">
-            <div class="input-group">
-              <label for="sb-url">Project URL (Supabase)</label>
-              <input type="url" id="sb-url" placeholder="https://xyzcompany.supabase.co" />
-            </div>
-
-            <div class="input-group">
-              <label for="sb-key">Anon / Public API Key</label>
-              <input type="password" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsIn..." />
-            </div>
-
-            <div class="input-group">
-              <label for="sb-table">Nome da Tabela de Produtos</label>
-              <input type="text" id="sb-table" value="produtos" />
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 20px">
-              <button type="submit" class="btn btn-primary">Salvar Credenciais</button>
-              <button type="button" id="sb-test-btn" class="btn btn-outline">Testar Conexão</button>
-              <button type="button" id="sb-sync-btn" class="btn btn-outline">Exportar Produtos para Supabase</button>
-            </div>
-          </form>
-
-          <h5 style="margin-top: 30px; font-size: 14px; font-weight: 700">Script SQL para criar a tabela no Supabase:</h5>
-          <pre class="code-snippet"><code>CREATE TABLE IF NOT EXISTS produtos (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  category TEXT NOT NULL,
-  detail TEXT,
-  price NUMERIC,
-  image TEXT,
-  tag TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Habilita Row Level Security
-ALTER TABLE produtos ENABLE ROW LEVEL SECURITY;
-
--- Permite que todos os clientes vejam o catálogo
-CREATE POLICY "Leitura pública" ON produtos FOR SELECT USING (true);
-
--- Permite gravação pelo painel administrativo
-CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WITH CHECK (true);</code></pre>
-        </div>
-      </section>
-
-      <!-- ABA 3: SEGURANÇA -->
+      <!-- ABA 2: SEGURANÇA -->
       <section class="tab-panel" id="tab-security">
         <div class="settings-card">
           <h4>Alterar Senha do Administrador</h4>
@@ -571,9 +514,6 @@ CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WI
       </div>
     </div>
 
-    <!-- Supabase JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script>
       // Senha Padrão
       const DEFAULT_PASSWORD = "mimo2026";
@@ -594,7 +534,6 @@ CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WI
           adminMain.style.display = "block";
           adminHeader.style.display = "flex";
           loadAdminProducts();
-          loadSupabaseConfig();
         } else {
           loginSection.style.display = "flex";
           adminMain.style.display = "none";
@@ -814,84 +753,6 @@ CREATE POLICY "Gerenciamento completo admin" ON produtos FOR ALL USING (true) WI
 
         saveProducts();
         modal.classList.remove("open");
-      });
-
-      // Supabase Config
-      const sbForm = document.getElementById("supabase-form");
-      const sbAlert = document.getElementById("supabase-alert");
-      const sbTestBtn = document.getElementById("sb-test-btn");
-      const sbSyncBtn = document.getElementById("sb-sync-btn");
-
-      function loadSupabaseConfig() {
-        const cfg = JSON.parse(localStorage.getItem("mimo_supabase_config") || "{}");
-        if (cfg.url) document.getElementById("sb-url").value = cfg.url;
-        if (cfg.key) document.getElementById("sb-key").value = cfg.key;
-        if (cfg.table) document.getElementById("sb-table").value = cfg.table;
-      }
-
-      sbForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const url = document.getElementById("sb-url").value.trim();
-        const key = document.getElementById("sb-key").value.trim();
-        const table = document.getElementById("sb-table").value.trim() || "produtos";
-
-        localStorage.setItem("mimo_supabase_config", JSON.stringify({ url, key, table }));
-        sbAlert.className = "alert alert-success";
-        sbAlert.textContent = "Credenciais do Supabase salvas com sucesso!";
-        sbAlert.style.display = "block";
-      });
-
-      sbTestBtn.addEventListener("click", async () => {
-        const url = document.getElementById("sb-url").value.trim();
-        const key = document.getElementById("sb-key").value.trim();
-        const table = document.getElementById("sb-table").value.trim() || "produtos";
-
-        if (!url || !key) {
-          alert("Por favor, preencha o Project URL e a Anon Key do Supabase.");
-          return;
-        }
-
-        try {
-          const client = supabase.createClient(url, key);
-          const { data, error } = await client.from(table).select("*").limit(1);
-          if (error) throw error;
-          sbAlert.className = "alert alert-success";
-          sbAlert.textContent = "Conexão com o Supabase estabelecida com sucesso!";
-          sbAlert.style.display = "block";
-        } catch (err) {
-          sbAlert.className = "alert alert-danger";
-          sbAlert.textContent = `Erro ao conectar: ${err.message}`;
-          sbAlert.style.display = "block";
-        }
-      });
-
-      sbSyncBtn.addEventListener("click", async () => {
-        const url = document.getElementById("sb-url").value.trim();
-        const key = document.getElementById("sb-key").value.trim();
-        const table = document.getElementById("sb-table").value.trim() || "produtos";
-
-        if (!url || !key) {
-          alert("Preencha e salve suas credenciais do Supabase antes de sincronizar.");
-          return;
-        }
-
-        try {
-          const client = supabase.createClient(url, key);
-          const cleanProducts = products.map((p) => ({
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            detail: p.detail,
-            price: p.price,
-            tag: p.tag,
-            image: p.image
-          }));
-          const { error } = await client.from(table).upsert(cleanProducts, { onConflict: "id" });
-          if (error) throw error;
-          alert("Catálogo sincronizado com sucesso para o banco de dados do Supabase!");
-        } catch (err) {
-          alert(`Erro na sincronização: ${err.message}`);
-        }
       });
 
       // Inicialização

@@ -426,27 +426,6 @@ if (menuToggle && mobileMenu) {
   });
 }
 
-// Sincronização Assíncrona com Supabase (se configurado)
-async function syncFromSupabase() {
-  try {
-    const cfgStr = localStorage.getItem("mimo_supabase_config");
-    if (!cfgStr) return;
-    const cfg = JSON.parse(cfgStr);
-    if (cfg && cfg.url && cfg.key && window.supabase) {
-      const client = window.supabase.createClient(cfg.url, cfg.key);
-      const { data, error } = await client.from(cfg.table || "produtos").select("*");
-      if (!error && data && data.length > 0) {
-        products = data;
-        localStorage.setItem("mimo_custom_products", JSON.stringify(products));
-        renderProducts();
-        updateFavoritesUI();
-      }
-    }
-  } catch (err) {
-    console.warn("Supabase fetch warning:", err);
-  }
-}
-
 // =================================================================
 // HERO SLIDER CAROUSEL (Coleções de Verão, Novidades, Queima de Estoque)
 // =================================================================
@@ -565,5 +544,4 @@ function initHeroSlider() {
 // Inicialização
 updateFavoritesUI();
 renderProducts();
-syncFromSupabase();
 initHeroSlider();
