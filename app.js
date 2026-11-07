@@ -1,6 +1,6 @@
 // Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
 // Carrega produtos (localStorage > fallback inicial atualizado)
-const CATALOG_VERSION = "v10-official-lupo-loba-2026";
+const CATALOG_VERSION = "v15-real-photos-nobox";
 const savedVersion = localStorage.getItem("mimo_catalog_version");
 let savedProducts = null;
 
@@ -65,8 +65,6 @@ function createProductCardHtml(product) {
   let tagHtml = '';
   if (isEsgotado) {
     tagHtml = '<span class="product-tag tag-esgotado">ESGOTADO</span>';
-  } else if (product.tag && product.tag !== 'Destaque') {
-    tagHtml = `<span class="product-tag">${product.tag}</span>`;
   }
 
   return `
@@ -837,15 +835,15 @@ if (menuToggle && mobileMenu) {
 // =================================================================
 const defaultHeroSlides = [
   {
-    tag: "Lupo, Loba & Lobinha",
+    tag: "",
     title: "Lupo para Todos",
     subtitle: "Moda íntima, meias, cuecas e pijamas de alta tecnologia e durabilidade incomparável para homens, mulheres e crianças",
     btnText: "Ver Coleção Lupo",
     filter: "Lupo",
-    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80"
+    image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1920&q=80"
   },
   {
-    tag: "Novidades Exclusivas",
+    tag: "",
     title: "Novidades do Site",
     subtitle: "Conforto e elegância que abraçam você. Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego",
     btnText: "Explorar Novidades",
@@ -853,7 +851,7 @@ const defaultHeroSlides = [
     image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80"
   },
   {
-    tag: "Verão 2026 & Proteção UV",
+    tag: "",
     title: "Moda Praia",
     subtitle: "Biquínis, maiôs e sungas anatômicas com proteção solar UV50+ e secagem ultra-rápida para aproveitar cada raio de sol",
     btnText: "Ver Moda Praia",
@@ -882,7 +880,6 @@ function initHeroSlider() {
       <div class="hero-slide-overlay"></div>
       <div class="hero-slide-content section-shell">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="badge-tag">${slide.tag}</span></p>
           <h1>${slide.title}</h1>
           <p class="hero-text">${slide.subtitle}</p>
           <div class="hero-actions">

@@ -926,7 +926,7 @@
       let products = [];
 
       function loadAdminProducts() {
-        const currentVersion = "v10-official-lupo-loba-2026";
+        const currentVersion = "v15-real-photos-nobox";
         const savedVersion = localStorage.getItem("mimo_catalog_version");
         let stored = null;
         try {
@@ -955,7 +955,7 @@
         if (confirm("Deseja sincronizar todas as 66 peças oficiais (Lupo, Loba, Lobinha e Moda Praia) com fotos fiéis e exatas?")) {
           if (window.defaultProducts && window.defaultProducts.length > 0) {
             products = [...window.defaultProducts];
-            localStorage.setItem("mimo_catalog_version", "v10-official-lupo-loba-2026");
+            localStorage.setItem("mimo_catalog_version", "v15-real-photos-nobox");
             localStorage.setItem("mimo_custom_products", JSON.stringify(products));
             renderAdminGrid();
             alert("Catálogo sincronizado com sucesso! Todas as 66 peças e fotos oficiais foram carregadas.");
@@ -1324,15 +1324,15 @@
       // =================================================================
       const defaultAdminHeroSlides = [
         {
-          tag: "Lupo, Loba & Lobinha",
+          tag: "",
           title: "Lupo para Todos",
           subtitle: "Moda íntima, meias, cuecas e pijamas de alta tecnologia e durabilidade incomparável para homens, mulheres e crianças",
           btnText: "Ver Coleção Lupo",
           filter: "Lupo",
-          image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80"
+          image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1920&q=80"
         },
         {
-          tag: "Novidades Exclusivas",
+          tag: "",
           title: "Novidades do Site",
           subtitle: "Conforto e elegância que abraçam você. Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego",
           btnText: "Explorar Novidades",
@@ -1340,7 +1340,7 @@
           image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80"
         },
         {
-          tag: "Verão 2026 & Proteção UV",
+          tag: "",
           title: "Moda Praia",
           subtitle: "Biquínis, maiôs e sungas anatômicas com proteção solar UV50+ e secagem ultra-rápida para aproveitar cada raio de sol",
           btnText: "Ver Moda Praia",

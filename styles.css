@@ -1636,20 +1636,22 @@ a {
 
 .product-card {
   min-width: 0;
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid rgba(72, 43, 89, 0.08);
+  background: transparent;
+  border-radius: 18px;
+  border: 1px solid transparent;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(50, 30, 62, 0.04);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+  padding: 6px;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-  border-color: rgba(107, 59, 143, 0.2);
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(107, 59, 143, 0.35);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .product-image-wrap {
@@ -1657,6 +1659,7 @@ a {
   position: relative;
   overflow: hidden;
   background: #ede6f2;
+  border-radius: 14px;
 }
 
 .product-image-wrap img {
@@ -1668,22 +1671,26 @@ a {
 }
 
 .product-card:hover .product-image-wrap img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .product-tag {
+  display: none !important;
+}
+
+.product-tag.tag-esgotado {
+  display: inline-block !important;
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   z-index: 2;
   border-radius: 999px;
-  padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  background: rgba(184, 51, 90, 0.9);
+  color: #fff;
   font-size: 10px;
   font-weight: 700;
-  color: var(--purple-dark);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  letter-spacing: 0.05em;
 }
 
 .product-fav {
@@ -2579,8 +2586,15 @@ a {
     gap: 8px !important;
   }
   .product-card {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
     border-radius: 12px;
     cursor: pointer;
+    padding: 3px !important;
+  }
+  .product-card:hover, .product-card:active {
+    border-color: rgba(107, 59, 143, 0.4) !important;
   }
   .product-image-wrap {
     height: 125px !important;
