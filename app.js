@@ -1,6 +1,6 @@
 // Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
 // Carrega produtos (localStorage > fallback inicial atualizado)
-const CATALOG_VERSION = "v3-exact-images";
+const CATALOG_VERSION = "v4-lupo-loba-catalog";
 const savedVersion = localStorage.getItem("mimo_catalog_version");
 let savedProducts = null;
 
@@ -36,7 +36,7 @@ const drawerCount = document.querySelector("#drawer-count");
 const sendFavsWa = document.querySelector("#send-favs-wa");
 
 let activeFilter = "Todos";
-let visibleCount = 8;
+let visibleCount = 12;
 let favorites = JSON.parse(localStorage.getItem("mimo_favs") || "[]");
 
 // Formatação de Preço BRL
@@ -50,7 +50,7 @@ function getWaProductUrl(product) {
   let variantsText = "";
   if (product.colors) variantsText += `\nCores de interesse: ${product.colors}`;
   if (product.sizes) variantsText += `\nTamanhos de interesse: ${product.sizes}`;
-  const text = `Olá! Vi no catálogo da Mimo Íntimo e gostaria de pedir:\n*${product.name}* (${formatPrice(product.price)})\nCategoria: ${product.category}${variantsText}\nEstá disponível para entrega/retirada?`;
+  const text = `Olá! Vi no catálogo da Mimo Íntimo e gostaria de pedir:\n*${product.name}* (${formatPrice(product.price)})\nCategoria: ${product.category}${product.brand ? ` (Marca: ${product.brand})` : ''}${variantsText}\nEstá disponível para entrega/retirada?`;
   return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
 }
 
@@ -60,8 +60,21 @@ function renderProducts() {
 
   const query = search ? search.value.trim().toLowerCase() : "";
   const filtered = products.filter((product) => {
-    const matchesCategory = activeFilter === "Todos" || product.category === activeFilter;
-    const matchesSearch = !query || `${product.name} ${product.detail} ${product.category} ${product.colors || ''} ${product.sizes || ''}`.toLowerCase().includes(query);
+    let matchesCategory = false;
+    const filter = activeFilter;
+    if (filter === "Todos") {
+      matchesCategory = true;
+    } else if (filter === "Lupo") {
+      matchesCategory = (product.brand === "Lupo") || (product.name && product.name.toLowerCase().includes("lupo"));
+    } else if (filter === "Loba") {
+      matchesCategory = (product.brand === "Loba") || (product.name && product.name.toLowerCase().includes("loba"));
+    } else if (filter === "Lobinha") {
+      matchesCategory = (product.brand === "Lobinha") || (product.name && product.name.toLowerCase().includes("lobinha"));
+    } else {
+      matchesCategory = product.category === filter;
+    }
+
+    const matchesSearch = !query || `${product.name} ${product.detail} ${product.category} ${product.brand || ''} ${product.colors || ''} ${product.sizes || ''}`.toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
   });
 
@@ -110,21 +123,30 @@ function renderProducts() {
   if (loadMoreBtn) loadMoreBtn.hidden = visible.length >= filtered.length;
 }
 
-// Filtro por Chips
-chips.forEach((chip) => {
+// Filtro por Chips do Catálogo
+document.querySelectorAll(".chip").forEach((chip) => {
   chip.addEventListener("click", () => {
-    activeFilter = chip.dataset.filter;
-    visibleCount = 8;
-    chips.forEach((item) => item.classList.toggle("active", item === chip));
-    renderProducts();
+    selectCategoryFilter(chip.dataset.filter);
   });
 });
 
 // Função reutilizável para aplicar filtro de categoria e rolar suavemente para o catálogo
 function selectCategoryFilter(cat) {
   activeFilter = cat || "Todos";
-  visibleCount = 8;
-  chips.forEach((item) => item.classList.toggle("active", item.dataset.filter === activeFilter));
+  visibleCount = 12;
+
+  document.querySelectorAll(".chip").forEach((item) => {
+    item.classList.toggle("active", item.dataset.filter === activeFilter);
+  });
+
+  document.querySelectorAll(".circle-cat-item").forEach((b) => {
+    b.classList.toggle("active", b.dataset.category === activeFilter);
+  });
+
+  document.querySelectorAll(".brand-chip").forEach((b) => {
+    b.classList.toggle("active", b.dataset.brand === activeFilter || (activeFilter === "Todos" && b.dataset.brand === "Todas"));
+  });
+
   renderProducts();
   const catalogEl = document.querySelector("#catalogo");
   if (catalogEl) {
@@ -165,8 +187,6 @@ if (topSearchInput) {
 // Clique nas Categorias em Círculos
 document.querySelectorAll(".circle-cat-item").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".circle-cat-item").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
     selectCategoryFilter(btn.dataset.category);
   });
 });
@@ -174,18 +194,20 @@ document.querySelectorAll(".circle-cat-item").forEach((btn) => {
 // Filtro por Marcas Parceiras
 document.querySelectorAll(".brand-chip").forEach((btn) => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".brand-chip").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
     const brand = btn.dataset.brand;
     if (brand === "Todas") {
       if (search) search.value = "";
+      selectCategoryFilter("Todos");
+    } else if (brand === "Lupo" || brand === "Loba" || brand === "Lobinha") {
+      if (search) search.value = "";
+      selectCategoryFilter(brand);
     } else {
       if (search) search.value = brand;
+      visibleCount = 12;
+      renderProducts();
+      const catalogEl = document.querySelector("#catalogo");
+      if (catalogEl) catalogEl.scrollIntoView({ behavior: "smooth" });
     }
-    visibleCount = 12;
-    renderProducts();
-    const catalogEl = document.querySelector("#catalogo");
-    if (catalogEl) catalogEl.scrollIntoView({ behavior: "smooth" });
   });
 });
 

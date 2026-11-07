@@ -846,6 +846,8 @@
       let products = [];
 
       function loadAdminProducts() {
+        const currentVersion = "v4-lupo-loba-catalog";
+        const savedVersion = localStorage.getItem("mimo_catalog_version");
         let stored = null;
         try {
           stored = JSON.parse(localStorage.getItem("mimo_custom_products") || "null");
@@ -853,14 +855,16 @@
           stored = null;
         }
 
-        if (Array.isArray(stored) && stored.length > 0) {
+        if (savedVersion === currentVersion && Array.isArray(stored) && stored.length > 0) {
           products = stored;
         } else if (window.defaultProducts && window.defaultProducts.length > 0) {
           products = [...window.defaultProducts];
           try {
-            localStorage.setItem("mimo_catalog_version", "v3-exact-images");
+            localStorage.setItem("mimo_catalog_version", currentVersion);
             localStorage.setItem("mimo_custom_products", JSON.stringify(products));
           } catch(e) {}
+        } else if (Array.isArray(stored)) {
+          products = stored;
         } else {
           products = [];
         }
