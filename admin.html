@@ -923,29 +923,33 @@
 
       let currentImageData = "";
 
-      prodFile.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          currentImageData = event.target.result;
-          previewImg.src = currentImageData;
-          previewImg.style.display = "block";
-          previewPlaceholder.style.display = "none";
-          prodUrl.value = "";
-        };
-        reader.readAsDataURL(file);
-      });
+      if (prodFile) {
+        prodFile.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            currentImageData = event.target.result;
+            previewImg.src = currentImageData;
+            previewImg.style.display = "block";
+            previewPlaceholder.style.display = "none";
+            if (prodUrl) prodUrl.value = "";
+          };
+          reader.readAsDataURL(file);
+        });
+      }
 
-      prodUrl.addEventListener("input", () => {
-        if (prodUrl.value.trim()) {
-          currentImageData = prodUrl.value.trim();
-          previewImg.src = currentImageData;
-          previewImg.style.display = "block";
-          previewPlaceholder.style.display = "none";
-          prodFile.value = "";
-        }
-      });
+      if (prodUrl) {
+        prodUrl.addEventListener("input", () => {
+          if (prodUrl.value.trim()) {
+            currentImageData = prodUrl.value.trim();
+            previewImg.src = currentImageData;
+            previewImg.style.display = "block";
+            previewPlaceholder.style.display = "none";
+            if (prodFile) prodFile.value = "";
+          }
+        });
+      }
 
       // Variáveis para fotos por cor
       let currentColorPhotos = {};
