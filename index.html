@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -22,11 +22,12 @@
     <!-- BARRA ROXA DE PONTA A PONTA NO TOPO -->
     <div class="announcement-top-bar">
       <div class="announcement-inner">
-        <span>✨ RETIRADA NA LOJA FÍSICA · ASA SUL (Brasília)</span>
-        <span class="bar-sep">|</span>
-        <span>Atendimento Personalizado & Peças Exclusivas</span>
-        <span class="bar-sep">|</span>
-        <a href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20reservar%20uma%20peça%20para%20retirada%20na%20loja" target="_blank" rel="noreferrer" class="announcement-link">
+        <span class="desktop-only-announcement">✨ RETIRADA NA LOJA FÍSICA · ASA SUL (Brasília)</span>
+        <span class="mobile-only-announcement">retirada na loja</span>
+        <span class="bar-sep desktop-only-announcement">|</span>
+        <span class="desktop-only-announcement">Atendimento Personalizado & Peças Exclusivas</span>
+        <span class="bar-sep desktop-only-announcement">|</span>
+        <a href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20reservar%20uma%20peça%20para%20retirada%20na%20loja" target="_blank" rel="noreferrer" class="announcement-link desktop-only-announcement">
           Reservar pelo WhatsApp ↗
         </a>
       </div>
@@ -63,15 +64,35 @@
       </div>
     </header>
 
-    <!-- BARRA DE PESQUISA RÁPIDA NO TOPO -->
+    <!-- BARRA DE PESQUISA RÁPIDA NO TOPO COM DROPDOWN DE OPÇÕES -->
     <div class="top-search-banner">
-      <div class="section-shell">
+      <div class="section-shell" style="position: relative;">
         <form class="top-search-form" id="top-search-form" onsubmit="event.preventDefault();">
           <span class="top-search-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </span>
-          <input class="top-search-input" id="top-search-input" type="search" placeholder="O que você procura hoje? (ex: camisola, lingerie, cueca, pijama, biquíni...)" />
+          <input class="top-search-input" id="top-search-input" type="search" autocomplete="off" placeholder="O que você procura hoje? (ex: cueca lupo, pijama, sutiã, calcinha...)" />
+          <button type="button" id="top-search-clear" class="top-search-clear-btn" style="display: none;">✕</button>
         </form>
+
+        <!-- DROPDOWN DE SUGESTÕES E RESULTADOS RÁPIDOS ABAIXO DA BARRA -->
+        <div class="search-dropdown-menu" id="search-dropdown-menu" style="display: none;">
+          <div class="search-suggestions-header">
+            <span class="search-suggestions-title">Opções Rápidas:</span>
+            <div class="search-quick-tags">
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Lupo')">Lupo</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Loba')">Loba</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Lobinha')">Lobinha</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Cueca Boxer')">Cueca Boxer</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Sutiã')">Sutiã</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Calcinha')">Calcinha</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Pijama')">Pijamas</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Meia')">Meias</button>
+              <button type="button" class="search-tag-chip" onclick="applyQuickSearch('Moda Praia')">Moda Praia</button>
+            </div>
+          </div>
+          <div class="search-live-results" id="search-live-results"></div>
+        </div>
       </div>
     </div>
 
@@ -80,52 +101,52 @@
       <section class="section-wrapper bg-beige hero-slider-wrapper" id="hero-carousel" aria-label="Destaques Mimo Íntimo">
         <div class="hero-slider" id="hero-slider">
 
-          <!-- SLIDE 1: Coleções de Verão -->
+          <!-- SLIDE 1: Lupo para Todos -->
           <div class="hero-slide active" data-index="0">
-            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80');"></div>
             <div class="hero-slide-overlay"></div>
             <div class="hero-slide-content section-shell">
               <div class="hero-copy">
-                <p class="eyebrow"><span class="badge-tag">Coleção Verão 2026</span></p>
-                <h1>Leveza, frescor e sol<br /><span>para o seu verão</span></h1>
-                <p class="hero-text">Biquínis, maiôs e saídas de praia em tecidos nobres com proteção UV e modelagem pensada para o seu bem-estar</p>
+                <p class="eyebrow"><span class="badge-tag">Lupo, Loba & Lobinha</span></p>
+                <h1>Lupo para Todos<br /><span>para toda a família</span></h1>
+                <p class="hero-text">Moda íntima, meias, cuecas e pijamas de alta tecnologia e durabilidade incomparável para homens, mulheres e crianças</p>
                 <div class="hero-actions">
-                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Moda Praia">Ver Moda Praia <span>↗</span></a>
-                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20conhecer%20a%20Coleção%20de%20Verão%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Lupo">Ver Coleção Lupo <span>↗</span></a>
+                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20conhecer%20a%20linha%20Lupo%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- SLIDE 2: Novidades -->
+          <!-- SLIDE 2: Novidades do Site -->
           <div class="hero-slide" data-index="1">
             <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80');"></div>
             <div class="hero-slide-overlay"></div>
             <div class="hero-slide-content section-shell">
               <div class="hero-copy">
                 <p class="eyebrow"><span class="badge-tag">Novidades Exclusivas</span></p>
-                <h1>Conforto e elegância<br /><span>que abraçam você</span></h1>
+                <h1>Novidades do Site<br /><span>que abraçam você</span></h1>
                 <p class="hero-text">Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego</p>
                 <div class="hero-actions">
-                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Feminino">Explorar Novidades <span>↗</span></a>
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Novidades">Explorar Novidades <span>↗</span></a>
                   <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20ver%20as%20novidades%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- SLIDE 3: Queima de Estoque -->
+          <!-- SLIDE 3: Moda Praia -->
           <div class="hero-slide" data-index="2">
-            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hero-slide-bg" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80');"></div>
             <div class="hero-slide-overlay"></div>
             <div class="hero-slide-content section-shell">
               <div class="hero-copy">
-                <p class="eyebrow"><span class="badge-tag badge-tag-sale">Oportunidade Especial</span></p>
-                <h1>Queima de estoque<br /><span>com até 40% OFF</span></h1>
-                <p class="hero-text">Peças selecionadas, conjuntos de lingerie e pijamas com descontos especiais enquanto durarem os estoques</p>
+                <p class="eyebrow"><span class="badge-tag">Verão 2026 & Proteção UV</span></p>
+                <h1>Moda Praia<br /><span>estilo e proteção ao sol</span></h1>
+                <p class="hero-text">Biquínis, maiôs e sungas anatômicas com proteção solar UV50+ e secagem ultra-rápida para aproveitar cada raio de sol</p>
                 <div class="hero-actions">
-                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Todos">Aproveitar Ofertas <span>↗</span></a>
-                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Quero%20aproveitar%20a%20Queima%20de%20Estoque%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Pedir no WhatsApp <span>→</span></a>
+                  <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="Moda Praia">Ver Moda Praia <span>↗</span></a>
+                  <a class="text-link" href="https://wa.me/5561982378130?text=Olá!%20Gostaria%20de%20conhecer%20a%20linha%20de%20Moda%20Praia%20da%20Mimo%20Íntimo" target="_blank" rel="noreferrer">Pedir no WhatsApp <span>→</span></a>
                 </div>
               </div>
             </div>
@@ -143,9 +164,9 @@
 
         <!-- Indicadores / Abas de Slides -->
         <div class="hero-indicators" id="hero-indicators">
-          <button class="hero-dot active" data-slide="0" aria-label="Ir para Coleção Verão"><span class="dot-bar"></span><span class="dot-label">Coleções de Verão</span></button>
-          <button class="hero-dot" data-slide="1" aria-label="Ir para Novidades"><span class="dot-bar"></span><span class="dot-label">Novidades</span></button>
-          <button class="hero-dot" data-slide="2" aria-label="Ir para Queima de Estoque"><span class="dot-bar"></span><span class="dot-label">Queima de Estoque</span></button>
+          <button class="hero-dot active" data-slide="0" aria-label="Ir para Lupo para Todos"><span class="dot-bar"></span><span class="dot-label">Lupo para Todos</span></button>
+          <button class="hero-dot" data-slide="1" aria-label="Ir para Novidades do Site"><span class="dot-bar"></span><span class="dot-label">Novidades do Site</span></button>
+          <button class="hero-dot" data-slide="2" aria-label="Ir para Moda Praia"><span class="dot-bar"></span><span class="dot-label">Moda Praia</span></button>
         </div>
       </section>
 
@@ -230,7 +251,8 @@
           </div>
           <div class="catalog-toolbar">
             <div class="filter-chips">
-              <button class="chip active" data-filter="Todos">Todos</button>
+              <button class="chip active" data-filter="Novidades">Novidades</button>
+              <button class="chip" data-filter="Todos">Todos</button>
               <button class="chip" data-filter="Feminino">Feminino</button>
               <button class="chip" data-filter="Masculino">Masculino</button>
               <button class="chip" data-filter="Infantil">Kids</button>
@@ -241,10 +263,55 @@
             </div>
             <label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Buscar produto" /></label>
           </div>
-          <div class="product-grid" id="product-grid"></div>
-          <div class="catalog-bottom">
-            <span id="result-count"></span>
-            <button class="button button-outline" id="load-more" type="button">Ver mais produtos <span>↓</span></button>
+
+          <!-- MODO NOVIDADES (EXIBIÇÃO INICIAL ORGANIZADA: 3 MULHER, 3 HOMEM, 3 CRIANÇAS) -->
+          <div class="catalog-novidades" id="catalog-novidades-view">
+            <!-- 1. Linha Feminino (Mulher) -->
+            <div class="novidades-row-group">
+              <div class="novidades-group-header">
+                <h3>✨ Mulher & Feminino</h3>
+                <button type="button" class="btn-subcat-more" onclick="selectCategoryFilter('Feminino')">Ver todas Feminino →</button>
+              </div>
+              <div class="product-grid novidades-subgrid" id="novidades-fem-grid"></div>
+            </div>
+
+            <!-- 2. Linha Masculino (Homem) -->
+            <div class="novidades-row-group">
+              <div class="novidades-group-header">
+                <h3>👔 Homem & Masculino</h3>
+                <button type="button" class="btn-subcat-more" onclick="selectCategoryFilter('Masculino')">Ver todos Masculino →</button>
+              </div>
+              <div class="product-grid novidades-subgrid" id="novidades-masc-grid"></div>
+            </div>
+
+            <!-- 3. Linha Infantil (Crianças) -->
+            <div class="novidades-row-group">
+              <div class="novidades-group-header">
+                <h3>🧸 Crianças & Infantil</h3>
+                <button type="button" class="btn-subcat-more" onclick="selectCategoryFilter('Infantil')">Ver todos Kids →</button>
+              </div>
+              <div class="product-grid novidades-subgrid" id="novidades-inf-grid"></div>
+            </div>
+
+            <!-- Botão Ver Catálogo Completo -->
+            <div class="catalog-see-all-wrap">
+              <button type="button" class="button button-primary btn-see-full-catalog" onclick="showFullCatalog()">
+                Ver Catálogo Completo (66 peças) <span>↓</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- MODO CATÁLOGO COMPLETO (Exibido ao filtrar por categoria, pesquisar ou clicar em ver tudo) -->
+          <div class="catalog-full-container" id="catalog-full-view" style="display: none;">
+            <div class="catalog-back-to-novidades">
+              <button type="button" class="btn-back-novidades" onclick="showNovidadesView()">← Voltar para Novidades</button>
+              <span class="catalog-active-filter-title" id="full-catalog-title">Todas as Peças</span>
+            </div>
+            <div class="product-grid" id="product-grid"></div>
+            <div class="catalog-bottom">
+              <span id="result-count"></span>
+              <button class="button button-outline" id="load-more" type="button">Ver mais produtos <span>↓</span></button>
+            </div>
           </div>
         </div>
       </section>

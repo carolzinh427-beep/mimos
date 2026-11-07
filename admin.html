@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet" />
     <style>
       :root {
         --purple: #6b3b8f;
@@ -135,7 +135,7 @@
         margin-bottom: 24px;
       }
       .login-card h2 {
-        font: 500 24px "Playfair Display", serif;
+        font: 500 24px "Bodoni Moda", "Playfair Display", serif;
         margin-bottom: 8px;
       }
       .login-card p {
@@ -203,6 +203,48 @@
         display: block;
       }
 
+      .hero-admin-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .hero-admin-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 24px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      @media (max-width: 768px) {
+        .hero-admin-card {
+          grid-template-columns: 1fr;
+        }
+      }
+      .hero-card-preview {
+        position: relative;
+        border-radius: 14px;
+        overflow: hidden;
+        height: 200px;
+        background: #ede6f2;
+        border: 1px solid var(--line);
+      }
+      .hero-card-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .hero-card-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .hero-card-fields .full-width {
+        grid-column: 1 / -1;
+      }
+
       /* Products Table & Grid */
       .panel-header {
         display: flex;
@@ -211,7 +253,7 @@
         margin-bottom: 24px;
       }
       .panel-header h3 {
-        font: 500 24px "Playfair Display", serif;
+        font: 500 24px "Bodoni Moda", "Playfair Display", serif;
       }
 
       .products-grid {
@@ -299,7 +341,7 @@
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
       }
       .modal-card h3 {
-        font: 500 22px "Playfair Display", serif;
+        font: 500 22px "Bodoni Moda", "Playfair Display", serif;
         margin-bottom: 20px;
       }
       .upload-preview {
@@ -482,7 +524,7 @@
         margin-bottom: 24px;
       }
       .settings-card h4 {
-        font: 500 20px "Playfair Display", serif;
+        font: 500 20px "Bodoni Moda", "Playfair Display", serif;
         margin-bottom: 8px;
       }
       .settings-card p {
@@ -558,6 +600,7 @@
     <main class="container" id="admin-main" style="display: none">
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-products">📦 Produtos & Imagens</button>
+        <button class="tab-btn" data-tab="tab-hero">🖼️ Banners do Hero</button>
         <button class="tab-btn" data-tab="tab-security">🔐 Senha & Segurança</button>
       </div>
 
@@ -599,6 +642,23 @@
             </div>
             <button type="submit" class="btn btn-primary">Atualizar Senha</button>
           </form>
+        </div>
+      </section>
+
+      <!-- ABA 3: BANNERS DO HERO -->
+      <section class="tab-panel" id="tab-hero">
+        <div class="panel-header">
+          <div>
+            <h3>Gerenciar Banners do Hero</h3>
+            <p style="font-size: 13px; color: var(--muted)">Personalize títulos, chamadas, botões, categorias e fotos dos 3 slides principais da página inicial</p>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="saveHeroSlidesFromAdmin()">💾 Salvar Banners</button>
+        </div>
+
+        <div id="hero-alert" class="alert alert-success" style="display: none; margin-bottom: 20px;"></div>
+
+        <div class="hero-admin-container" id="hero-admin-container">
+          <!-- Renderizado via JS -->
         </div>
       </section>
     </main>
@@ -822,6 +882,9 @@
           document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
           btn.classList.add("active");
           document.getElementById(btn.dataset.tab).classList.add("active");
+          if (btn.dataset.tab === "tab-hero") {
+            renderHeroAdminCards();
+          }
         });
       });
 
@@ -1239,7 +1302,117 @@
         modal.classList.remove("open");
       });
 
+      // =================================================================
+      // GERENCIAMENTO DE BANNERS DO HERO
+      // =================================================================
+      const defaultAdminHeroSlides = [
+        {
+          tag: "Lupo, Loba & Lobinha",
+          title: "Lupo para Todos",
+          subtitle: "Moda íntima, meias, cuecas e pijamas de alta tecnologia e durabilidade incomparável para homens, mulheres e crianças",
+          btnText: "Ver Coleção Lupo",
+          filter: "Lupo",
+          image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80"
+        },
+        {
+          tag: "Novidades Exclusivas",
+          title: "Novidades do Site",
+          subtitle: "Conforto e elegância que abraçam você. Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego",
+          btnText: "Explorar Novidades",
+          filter: "Novidades",
+          image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80"
+        },
+        {
+          tag: "Verão 2026 & Proteção UV",
+          title: "Moda Praia",
+          subtitle: "Biquínis, maiôs e sungas anatômicas com proteção solar UV50+ e secagem ultra-rápida para aproveitar cada raio de sol",
+          btnText: "Ver Moda Praia",
+          filter: "Moda Praia",
+          image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
+        }
+      ];
+
+      function getAdminHeroSlides() {
+        try {
+          const s = JSON.parse(localStorage.getItem("mimo_hero_slides") || "null");
+          if (Array.isArray(s) && s.length === 3) return s;
+        } catch (e) {}
+        return defaultAdminHeroSlides;
+      }
+
+      function renderHeroAdminCards() {
+        const container = document.getElementById("hero-admin-container");
+        if (!container) return;
+        const slides = getAdminHeroSlides();
+        container.innerHTML = slides.map((s, idx) => `
+          <div class="hero-admin-card" data-index="${idx}">
+            <div>
+              <h4 style="margin: 0 0 10px; font-size: 16px; color: var(--purple);">Slide ${idx + 1}: ${s.title}</h4>
+              <div class="hero-card-preview">
+                <img id="hero-preview-${idx}" src="${s.image}" alt="Slide ${idx + 1}" />
+              </div>
+            </div>
+            <div class="hero-card-fields">
+              <div class="input-group">
+                <label>Etiqueta / Tag Superior</label>
+                <input type="text" id="hero-tag-${idx}" value="${s.tag}" />
+              </div>
+              <div class="input-group">
+                <label>Título Principal</label>
+                <input type="text" id="hero-title-${idx}" value="${s.title}" />
+              </div>
+              <div class="input-group full-width">
+                <label>Subtítulo / Descrição</label>
+                <textarea id="hero-subtitle-${idx}" rows="2">${s.subtitle}</textarea>
+              </div>
+              <div class="input-group">
+                <label>Texto do Botão</label>
+                <input type="text" id="hero-btn-${idx}" value="${s.btnText}" />
+              </div>
+              <div class="input-group">
+                <label>Filtro de Categoria</label>
+                <select id="hero-filter-${idx}">
+                  <option value="Novidades" ${s.filter === 'Novidades' ? 'selected' : ''}>Novidades</option>
+                  <option value="Todos" ${s.filter === 'Todos' ? 'selected' : ''}>Todos os Produtos</option>
+                  <option value="Lupo" ${s.filter === 'Lupo' ? 'selected' : ''}>Lupo</option>
+                  <option value="Loba" ${s.filter === 'Loba' ? 'selected' : ''}>Loba</option>
+                  <option value="Lobinha" ${s.filter === 'Lobinha' ? 'selected' : ''}>Lobinha</option>
+                  <option value="Feminino" ${s.filter === 'Feminino' ? 'selected' : ''}>Feminino</option>
+                  <option value="Masculino" ${s.filter === 'Masculino' ? 'selected' : ''}>Masculino</option>
+                  <option value="Infantil" ${s.filter === 'Infantil' ? 'selected' : ''}>Infantil / Kids</option>
+                  <option value="Moda Praia" ${s.filter === 'Moda Praia' ? 'selected' : ''}>Moda Praia</option>
+                </select>
+              </div>
+              <div class="input-group full-width">
+                <label>URL da Imagem de Fundo</label>
+                <input type="text" id="hero-image-${idx}" value="${s.image}" oninput="document.getElementById('hero-preview-${idx}').src = this.value;" />
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      window.saveHeroSlidesFromAdmin = function() {
+        const updated = [0, 1, 2].map(idx => ({
+          tag: document.getElementById(`hero-tag-${idx}`).value.trim(),
+          title: document.getElementById(`hero-title-${idx}`).value.trim(),
+          subtitle: document.getElementById(`hero-subtitle-${idx}`).value.trim(),
+          btnText: document.getElementById(`hero-btn-${idx}`).value.trim(),
+          filter: document.getElementById(`hero-filter-${idx}`).value,
+          image: document.getElementById(`hero-image-${idx}`).value.trim()
+        }));
+
+        localStorage.setItem("mimo_hero_slides", JSON.stringify(updated));
+        const alertEl = document.getElementById("hero-alert");
+        if (alertEl) {
+          alertEl.textContent = "Banners do Hero salvos com sucesso! As alterações já estão ativas no site.";
+          alertEl.style.display = "block";
+          setTimeout(() => { alertEl.style.display = "none"; }, 4000);
+        }
+      };
+
       // Inicialização
+      renderHeroAdminCards();
       checkAuth();
     </script>
   </body>

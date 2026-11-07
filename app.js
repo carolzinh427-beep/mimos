@@ -35,7 +35,7 @@ const drawerItems = document.querySelector("#drawer-items");
 const drawerCount = document.querySelector("#drawer-count");
 const sendFavsWa = document.querySelector("#send-favs-wa");
 
-let activeFilter = "Todos";
+let activeFilter = "Novidades";
 let visibleCount = 12;
 let favorites = JSON.parse(localStorage.getItem("mimo_favs") || "[]");
 
@@ -54,15 +54,102 @@ function getWaProductUrl(product) {
   return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
 }
 
-// Renderização dos Produtos
-function renderProducts() {
-  if (!grid) return;
+// Gera o HTML padrão de um card de produto
+function createProductCardHtml(product) {
+  const isFav = favorites.includes(product.id);
+  const isEsgotado = !!product.esgotado;
 
-  const query = search ? search.value.trim().toLowerCase() : "";
+  let tagHtml = '';
+  if (isEsgotado) {
+    tagHtml = '<span class="product-tag tag-esgotado">ESGOTADO</span>';
+  } else if (product.tag && product.tag !== 'Destaque') {
+    tagHtml = `<span class="product-tag">${product.tag}</span>`;
+  }
+
+  return `
+    <article class="product-card ${isEsgotado ? 'is-esgotado' : ''}" data-id="${product.id}" onclick="openProductModal('${product.id}')">
+      <div class="product-image-wrap">
+        <img src="${product.image}" alt="${product.name}" loading="lazy" />
+        ${tagHtml}
+        <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}" onclick="event.stopPropagation();">
+          ${isFav ? '♥' : '♡'}
+        </button>
+      </div>
+      <div class="product-info">
+        <h3>${product.name}</h3>
+        <div class="product-bottom">
+          <div class="product-price">
+            <strong style="${isEsgotado ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${formatPrice(product.price)}</strong>
+          </div>
+          <span class="mobile-tap-hint">Ver detalhes ↗</span>
+          ${!isEsgotado ? `
+            <a class="product-wa-btn" href="${getWaProductUrl(product)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation();">
+              <span>Pedir</span>
+            </a>
+          ` : ''}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+// Renderização dos Produtos e Alternância de Telas (Novidades vs Catálogo Completo)
+function renderProducts() {
+  const novidadesView = document.querySelector("#catalog-novidades-view");
+  const fullView = document.querySelector("#catalog-full-view");
+  const fullTitle = document.querySelector("#full-catalog-title");
+  const femGrid = document.querySelector("#novidades-fem-grid");
+  const mascGrid = document.querySelector("#novidades-masc-grid");
+  const infGrid = document.querySelector("#novidades-inf-grid");
+
+  const query = (search && search.value ? search.value.trim().toLowerCase() : "") || 
+                (topSearchInput && topSearchInput.value ? topSearchInput.value.trim().toLowerCase() : "");
+
+  // Se o filtro for 'Novidades' e não houver pesquisa textual, exibe a curadoria organizada
+  if (activeFilter === "Novidades" && !query && novidadesView && fullView) {
+    novidadesView.style.display = "flex";
+    fullView.style.display = "none";
+
+    // 3 de Mulher / Feminino
+    if (femGrid) {
+      const femItems = products.filter(p => p.category === "Feminino").slice(0, 3);
+      femGrid.innerHTML = femItems.map(createProductCardHtml).join("");
+    }
+
+    // 3 de Homem / Masculino
+    if (mascGrid) {
+      const mascItems = products.filter(p => p.category === "Masculino").slice(0, 3);
+      mascGrid.innerHTML = mascItems.map(createProductCardHtml).join("");
+    }
+
+    // 3 de Kids / Crianças / Infantil
+    if (infGrid) {
+      const infItems = products.filter(p => p.category === "Infantil").slice(0, 3);
+      infGrid.innerHTML = infItems.map(createProductCardHtml).join("");
+    }
+    return;
+  }
+
+  // Caso contrário, exibe o Catálogo Completo filtrado
+  if (novidadesView && fullView) {
+    novidadesView.style.display = "none";
+    fullView.style.display = "block";
+  }
+
+  if (fullTitle) {
+    if (query) {
+      fullTitle.textContent = `Resultados para "${query}"`;
+    } else if (activeFilter === "Todos") {
+      fullTitle.textContent = "Catálogo Completo (Todas as Peças)";
+    } else {
+      fullTitle.textContent = `Categoria: ${activeFilter}`;
+    }
+  }
+
   const filtered = products.filter((product) => {
     let matchesCategory = false;
     const filter = activeFilter;
-    if (filter === "Todos") {
+    if (filter === "Todos" || filter === "Novidades") {
       matchesCategory = true;
     } else if (filter === "Lupo") {
       matchesCategory = (product.brand === "Lupo") || (product.name && product.name.toLowerCase().includes("lupo"));
@@ -79,49 +166,26 @@ function renderProducts() {
   });
 
   const visible = filtered.slice(0, visibleCount);
-
-  grid.innerHTML = visible.map((product) => {
-    const isFav = favorites.includes(product.id);
-    const isEsgotado = !!product.esgotado;
-
-    // Apenas se tiver destaque especial ou esgotado
-    let tagHtml = '';
-    if (isEsgotado) {
-      tagHtml = '<span class="product-tag tag-esgotado">ESGOTADO</span>';
-    } else if (product.tag && product.tag !== 'Destaque') {
-      tagHtml = `<span class="product-tag">${product.tag}</span>`;
+  if (grid) {
+    if (visible.length === 0) {
+      grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--muted); font-size: 15px;">Nenhum produto encontrado. Tente buscar por outro termo ou categoria.</div>`;
+    } else {
+      grid.innerHTML = visible.map(createProductCardHtml).join("");
     }
-
-    return `
-      <article class="product-card ${isEsgotado ? 'is-esgotado' : ''}" data-id="${product.id}" onclick="openProductModal('${product.id}')">
-        <div class="product-image-wrap">
-          <img src="${product.image}" alt="${product.name}" loading="lazy" />
-          ${tagHtml}
-          <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}" onclick="event.stopPropagation();">
-            ${isFav ? '♥' : '♡'}
-          </button>
-        </div>
-        <div class="product-info">
-          <h3>${product.name}</h3>
-          <div class="product-bottom">
-            <div class="product-price">
-              <strong style="${isEsgotado ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${formatPrice(product.price)}</strong>
-            </div>
-            <span class="mobile-tap-hint">Ver detalhes ↗</span>
-            ${!isEsgotado ? `
-              <a class="product-wa-btn" href="${getWaProductUrl(product)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation();">
-                <span>Pedir</span>
-              </a>
-            ` : ''}
-          </div>
-        </div>
-      </article>
-    `;
-  }).join("");
+  }
 
   if (count) count.textContent = `Mostrando ${visible.length} de ${filtered.length} produtos`;
   if (loadMoreBtn) loadMoreBtn.hidden = visible.length >= filtered.length;
 }
+
+// Funções globais de alternância
+window.showFullCatalog = function() {
+  selectCategoryFilter("Todos");
+};
+
+window.showNovidadesView = function() {
+  selectCategoryFilter("Novidades");
+};
 
 // Filtro por Chips do Catálogo
 document.querySelectorAll(".chip").forEach((chip) => {
@@ -132,7 +196,7 @@ document.querySelectorAll(".chip").forEach((chip) => {
 
 // Função reutilizável para aplicar filtro de categoria e rolar suavemente para o catálogo
 function selectCategoryFilter(cat) {
-  activeFilter = cat || "Todos";
+  activeFilter = cat || "Novidades";
   visibleCount = 12;
 
   document.querySelectorAll(".chip").forEach((item) => {
@@ -158,7 +222,7 @@ function selectCategoryFilter(cat) {
 document.querySelectorAll(".hero-btn-cat").forEach((btn) => {
   btn.addEventListener("click", (e) => {
     e.preventDefault();
-    const filter = btn.dataset.filter || "Todos";
+    const filter = btn.dataset.filter || "Novidades";
     selectCategoryFilter(filter);
   });
 });
@@ -170,19 +234,110 @@ categoryCards.forEach((card) => {
   });
 });
 
-// Barra de Pesquisa Rápida no Topo
+// =================================================================
+// BARRA DE PESQUISA RÁPIDA NO TOPO COM DROPDOWN DE OPÇÕES
+// =================================================================
 const topSearchInput = document.getElementById("top-search-input");
+const topSearchDropdown = document.getElementById("search-dropdown-menu");
+const searchLiveResults = document.getElementById("search-live-results");
+const topSearchClearBtn = document.getElementById("top-search-clear");
+
+function updateSearchLiveResults(query) {
+  if (!searchLiveResults) return;
+  const q = query.trim().toLowerCase();
+  if (!q) {
+    searchLiveResults.innerHTML = `
+      <div style="padding: 14px 16px; font-size: 13px; color: var(--muted); text-align: center;">
+        Digite acima para buscar entre os 66 produtos da loja ou clique em uma opção rápida.
+      </div>
+    `;
+    return;
+  }
+
+  const matches = products.filter(p => {
+    return `${p.name} ${p.category} ${p.brand || ''} ${p.detail || ''}`.toLowerCase().includes(q);
+  }).slice(0, 6);
+
+  if (matches.length === 0) {
+    searchLiveResults.innerHTML = `
+      <div style="padding: 16px; font-size: 13px; color: var(--muted); text-align: center;">
+        Nenhum produto encontrado para "<strong>${query}</strong>".
+      </div>
+    `;
+    return;
+  }
+
+  searchLiveResults.innerHTML = matches.map(p => `
+    <div class="search-result-item" onclick="openProductFromSearch('${p.id}')">
+      <img src="${p.image}" alt="${p.name}" class="search-result-thumb" />
+      <div class="search-result-info">
+        <span class="search-result-name">${p.name}</span>
+        <div class="search-result-meta">
+          <span class="search-result-category">${p.category}</span>
+          ${p.brand ? `<span class="search-result-brand">${p.brand}</span>` : ''}
+        </div>
+      </div>
+      <strong class="search-result-price">${formatPrice(p.price)}</strong>
+    </div>
+  `).join("");
+}
+
+window.openProductFromSearch = function(productId) {
+  if (topSearchDropdown) topSearchDropdown.style.display = "none";
+  openProductModal(productId);
+};
+
+window.applyQuickSearch = function(term) {
+  if (topSearchInput) topSearchInput.value = term;
+  if (search) search.value = term;
+  if (topSearchClearBtn) topSearchClearBtn.style.display = "block";
+  if (topSearchDropdown) topSearchDropdown.style.display = "none";
+  activeFilter = "Todos";
+  visibleCount = 18;
+  renderProducts();
+  const catEl = document.querySelector("#catalogo");
+  if (catEl) catEl.scrollIntoView({ behavior: "smooth" });
+};
+
 if (topSearchInput) {
+  topSearchInput.addEventListener("focus", () => {
+    if (topSearchDropdown) topSearchDropdown.style.display = "block";
+    updateSearchLiveResults(topSearchInput.value);
+  });
+
   topSearchInput.addEventListener("input", () => {
-    if (search) search.value = topSearchInput.value;
+    const val = topSearchInput.value;
+    if (topSearchClearBtn) topSearchClearBtn.style.display = val.length > 0 ? "block" : "none";
+    if (search) search.value = val;
+    if (topSearchDropdown) topSearchDropdown.style.display = "block";
+    updateSearchLiveResults(val);
     visibleCount = 12;
     renderProducts();
-    const catalogEl = document.querySelector("#catalogo");
-    if (catalogEl && topSearchInput.value.trim().length > 1) {
-      catalogEl.scrollIntoView({ behavior: "smooth" });
-    }
   });
 }
+
+if (topSearchClearBtn) {
+  topSearchClearBtn.addEventListener("click", () => {
+    if (topSearchInput) topSearchInput.value = "";
+    if (search) search.value = "";
+    topSearchClearBtn.style.display = "none";
+    updateSearchLiveResults("");
+    renderProducts();
+  });
+}
+
+// Fechar dropdown ao clicar fora ou pressionar ESC
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".top-search-banner")) {
+    if (topSearchDropdown) topSearchDropdown.style.display = "none";
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && topSearchDropdown) {
+    topSearchDropdown.style.display = "none";
+  }
+});
 
 // Clique nas Categorias em Círculos
 document.querySelectorAll(".circle-cat-item").forEach((btn) => {
@@ -197,12 +352,15 @@ document.querySelectorAll(".brand-chip").forEach((btn) => {
     const brand = btn.dataset.brand;
     if (brand === "Todas") {
       if (search) search.value = "";
+      if (topSearchInput) topSearchInput.value = "";
       selectCategoryFilter("Todos");
     } else if (brand === "Lupo" || brand === "Loba" || brand === "Lobinha") {
       if (search) search.value = "";
+      if (topSearchInput) topSearchInput.value = "";
       selectCategoryFilter(brand);
     } else {
       if (search) search.value = brand;
+      if (topSearchInput) topSearchInput.value = brand;
       visibleCount = 12;
       renderProducts();
       const catalogEl = document.querySelector("#catalogo");
@@ -334,18 +492,26 @@ window.switchProductColor = function(productId, color) {
   currentSelectedColor = color;
 
   document.querySelectorAll("#modal-detail-colors .modal-chip").forEach(chip => {
-    chip.style.borderColor = chip.textContent.trim() === color ? "var(--purple)" : "rgba(107, 59, 143, 0.2)";
-    chip.style.background = chip.textContent.trim() === color ? "var(--purple-soft)" : "#faf7f8";
+    const isSelected = chip.textContent.trim() === color;
+    chip.style.borderColor = isSelected ? "var(--purple)" : "rgba(107, 59, 143, 0.2)";
+    chip.style.background = isSelected ? "var(--purple-soft)" : "#faf7f8";
   });
 
   const modalImg = document.getElementById("modal-detail-img");
-  // Se tiver foto específica cadastrada no admin para aquela cor:
-  if (product.colorPhotos && product.colorPhotos[color]) {
-    modalImg.src = product.colorPhotos[color];
-  } else {
-    // Busca inteligente com IA para a cor específica
-    const colorAiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(product.name + ' cor ' + color + ' lingerie studio product shot')}?width=800&height=1000&nologo=true`;
-    modalImg.src = colorAiUrl;
+  if (modalImg) {
+    if (product.colorPhotos && product.colorPhotos[color]) {
+      modalImg.src = product.colorPhotos[color];
+    } else {
+      // Gera automaticamente a imagem idêntica ao produto na cor respectiva
+      const prompt = `${product.name} ${product.brand || ''} na cor ${color}, fotografia profissional de catálogo em estúdio fotográfico, fundo branco limpo, iluminação de moda, 4k hd`;
+      const colorAiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=1000&nologo=true`;
+      modalImg.src = colorAiUrl;
+      if (!product.colorPhotos) product.colorPhotos = {};
+      product.colorPhotos[color] = colorAiUrl;
+      try {
+        localStorage.setItem("mimo_custom_products", JSON.stringify(products));
+      } catch (e) {}
+    }
   }
 
   updateModalWaLink(product);
@@ -651,11 +817,84 @@ if (menuToggle && mobileMenu) {
 }
 
 // =================================================================
-// HERO SLIDER CAROUSEL (Coleções de Verão, Novidades, Queima de Estoque)
+// HERO SLIDER CAROUSEL (Lupo para Todos, Novidades do Site, Moda Praia)
 // =================================================================
+const defaultHeroSlides = [
+  {
+    tag: "Lupo, Loba & Lobinha",
+    title: "Lupo para Todos",
+    subtitle: "Moda íntima, meias, cuecas e pijamas de alta tecnologia e durabilidade incomparável para homens, mulheres e crianças",
+    btnText: "Ver Coleção Lupo",
+    filter: "Lupo",
+    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1920&q=80"
+  },
+  {
+    tag: "Novidades Exclusivas",
+    title: "Novidades do Site",
+    subtitle: "Conforto e elegância que abraçam você. Lingeries em renda antialérgica, peças sem costura e pijamas de seda criados para celebrar sua beleza com aconchego",
+    btnText: "Explorar Novidades",
+    filter: "Novidades",
+    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1920&q=80"
+  },
+  {
+    tag: "Verão 2026 & Proteção UV",
+    title: "Moda Praia",
+    subtitle: "Biquínis, maiôs e sungas anatômicas com proteção solar UV50+ e secagem ultra-rápida para aproveitar cada raio de sol",
+    btnText: "Ver Moda Praia",
+    filter: "Moda Praia",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80"
+  }
+];
+
 function initHeroSlider() {
   const slider = document.querySelector("#hero-slider");
   if (!slider) return;
+
+  // Carrega slides customizados pelo admin se houver
+  let heroSlides = defaultHeroSlides;
+  try {
+    const customSlides = JSON.parse(localStorage.getItem("mimo_hero_slides") || "null");
+    if (Array.isArray(customSlides) && customSlides.length > 0) {
+      heroSlides = customSlides;
+    }
+  } catch (e) {}
+
+  // Renderiza slides dinamicamente
+  slider.innerHTML = heroSlides.map((slide, i) => `
+    <div class="hero-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
+      <div class="hero-slide-bg" style="background-image: url('${slide.image}');"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content section-shell">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="badge-tag">${slide.tag}</span></p>
+          <h1>${slide.title}</h1>
+          <p class="hero-text">${slide.subtitle}</p>
+          <div class="hero-actions">
+            <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="${slide.filter || 'Novidades'}">${slide.btnText || 'Ver Coleção'} <span>↗</span></a>
+            <a class="text-link" href="https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre ' + slide.title + ' da Mimo Íntimo')}" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  const indicatorsContainer = document.querySelector("#hero-indicators");
+  if (indicatorsContainer) {
+    indicatorsContainer.innerHTML = heroSlides.map((slide, i) => `
+      <button class="hero-dot ${i === 0 ? 'active' : ''}" data-slide="${i}" aria-label="Ir para ${slide.title}">
+        <span class="dot-bar"></span><span class="dot-label">${slide.title}</span>
+      </button>
+    `).join("");
+  }
+
+  // Re-atribui evento de clique para os botões do hero slider
+  slider.querySelectorAll(".hero-btn-cat").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const filter = btn.dataset.filter || "Novidades";
+      selectCategoryFilter(filter);
+    });
+  });
 
   const slides = [...slider.querySelectorAll(".hero-slide")];
   const dots = [...document.querySelectorAll(".hero-dot")];
@@ -705,28 +944,28 @@ function initHeroSlider() {
 
   // Eventos de clique nas setas
   if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
+    nextBtn.onclick = () => {
       nextSlide();
       startAutoPlay();
-    });
+    };
   }
 
   if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
+    prevBtn.onclick = () => {
       prevSlide();
       startAutoPlay();
-    });
+    };
   }
 
   // Eventos de clique nos indicadores (dots / abas)
   dots.forEach((dot) => {
-    dot.addEventListener("click", () => {
+    dot.onclick = () => {
       const targetIndex = parseInt(dot.dataset.slide, 10);
       if (!isNaN(targetIndex)) {
         showSlide(targetIndex);
         startAutoPlay();
       }
-    });
+    };
   });
 
   // Pausar rotação ao passar o mouse por cima

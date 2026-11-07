@@ -15,6 +15,8 @@
   --shadow: 0 16px 40px rgba(66, 35, 84, 0.07);
   --shadow-hover: 0 20px 45px rgba(66, 35, 84, 0.13);
   --green-wa: #25d366;
+  --font-fashion: "Bodoni Moda", "Playfair Display", serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 * {
@@ -39,6 +41,12 @@ body {
 h1, h2, h3, h4, h5, h6, p, span, a, small, strong {
   overflow-wrap: break-word;
   word-wrap: break-word;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-fashion);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 /* Background Ambient Glows */
@@ -152,6 +160,26 @@ a {
 }
 .announcement-link:hover {
   opacity: 0.85;
+}
+
+.mobile-only-announcement {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only-announcement {
+    display: none !important;
+  }
+  .mobile-only-announcement {
+    display: inline !important;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .announcement-top-bar {
+    padding: 7px 12px;
+  }
 }
 
 /* Header & Glass Navbar Flutuante */
@@ -439,7 +467,7 @@ a {
 }
 
 .slide-badge-card strong {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-fashion);
   font-size: 20px;
   color: var(--foreground);
 }
@@ -571,11 +599,11 @@ a {
 }
 
 .hero-slide h1 {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-fashion);
   font-size: clamp(30px, 5vw, 62px);
   line-height: 1.1;
   font-weight: 500;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   margin: 0;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -753,7 +781,7 @@ a {
 }
 
 .art-caption strong {
-  font: 19px "Playfair Display", serif;
+  font: 19px var(--font-fashion);
 }
 
 .floating-note {
@@ -941,6 +969,127 @@ a {
   color: var(--ink);
 }
 
+.top-search-clear-btn {
+  background: none;
+  border: 0;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+}
+
+.search-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(620px, calc(100vw - 32px));
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(50, 20, 60, 0.16);
+  border: 1px solid rgba(107, 59, 143, 0.15);
+  margin-top: 8px;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.search-suggestions-header {
+  margin-bottom: 12px;
+}
+
+.search-suggestions-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.search-quick-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.search-tag-chip {
+  background: var(--purple-soft);
+  color: var(--purple-dark);
+  border: 1px solid rgba(107, 59, 143, 0.15);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-tag-chip:hover {
+  background: var(--purple);
+  color: #fff;
+  border-color: var(--purple);
+  transform: translateY(-1px);
+}
+
+.search-live-results {
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.search-result-item:hover {
+  background: #fbf8fc;
+}
+
+.search-result-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #ede6f2;
+}
+
+.search-result-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.search-result-info strong {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.search-result-info span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.search-result-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--purple);
+}
+
 /* MODAL DE DETALHES DO PRODUTO (PÁGINA DEDICADA / URL) */
 .product-modal-view {
   position: fixed;
@@ -1032,7 +1181,7 @@ a {
 }
 
 .product-modal-details h2 {
-  font: 600 22px / 1.2 "Playfair Display", serif;
+  font: 600 24px / 1.2 var(--font-fashion);
   color: var(--ink);
   margin: 0 0 10px;
 }
@@ -1223,8 +1372,8 @@ a {
 .section-heading h2,
 .about h2,
 .contact h2 {
-  font: 500 clamp(28px, 4vw, 48px) / 1.1 "Playfair Display", serif;
-  letter-spacing: -0.03em;
+  font: 500 clamp(28px, 4vw, 48px) / 1.1 var(--font-fashion);
+  letter-spacing: -0.01em;
   margin: 0;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -1359,6 +1508,117 @@ a {
   background: #9e91a3 !important;
   cursor: not-allowed;
   opacity: 0.75;
+}
+
+/* Novidades Curadoria (3 Mulher, 3 Homem, 3 Crianças) */
+.catalog-novidades {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin-top: 10px;
+}
+
+.novidades-row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.novidades-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(107, 59, 143, 0.12);
+  padding-bottom: 10px;
+}
+
+.novidades-group-header h3 {
+  font-family: var(--font-fashion);
+  font-size: clamp(20px, 3vw, 26px);
+  color: var(--foreground);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-subcat-more {
+  background: none;
+  border: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--purple);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s;
+  padding: 4px 8px;
+}
+
+.btn-subcat-more:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+.novidades-subgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px;
+}
+
+.catalog-see-all-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 10px;
+}
+
+.btn-see-full-catalog {
+  font-size: 15px;
+  padding: 16px 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(107, 59, 143, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-see-full-catalog:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(107, 59, 143, 0.35);
+}
+
+.catalog-back-to-novidades {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(107, 59, 143, 0.12);
+}
+
+.btn-back-novidades {
+  background: rgba(107, 59, 143, 0.08);
+  border: 1px solid rgba(107, 59, 143, 0.2);
+  color: var(--purple);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-back-novidades:hover {
+  background: var(--purple);
+  color: #fff;
+}
+
+.catalog-active-filter-title {
+  font-family: var(--font-fashion);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
 /* Product Grid & Cards */
@@ -1598,7 +1858,7 @@ a {
 }
 
 .contact h2 {
-  font: 500 clamp(30px, 4.5vw, 50px) / 1.1 "Playfair Display", serif;
+  font: 500 clamp(30px, 4.5vw, 50px) / 1.1 var(--font-fashion);
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
@@ -1937,7 +2197,7 @@ a {
 }
 
 .pix-popup-card h3 {
-  font: 600 20px "Playfair Display", serif;
+  font: 600 20px var(--font-fashion);
   margin: 0 0 10px;
   color: var(--ink);
 }
@@ -2435,11 +2695,11 @@ a {
     border-bottom: 0;
   }
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
   }
   .product-image-wrap {
-    height: 190px;
+    height: 140px;
   }
   .product-info {
     padding: 14px 12px 16px;
