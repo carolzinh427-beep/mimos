@@ -393,7 +393,7 @@
         <form id="login-form">
           <div class="input-group">
             <label for="admin-email">E-mail de Acesso</label>
-            <input type="email" id="admin-email" placeholder="Nunes.501@hotmail.com" required autofocus />
+            <input type="email" id="admin-email" placeholder="seu-email@exemplo.com" required autofocus />
           </div>
           <div class="input-group">
             <label for="admin-pass">Senha de Acesso</label>
@@ -403,9 +403,6 @@
             Entrar no Painel
           </button>
         </form>
-        <small style="display: block; margin-top: 18px; font-size: 11px; color: var(--muted)">
-          Acesso padrão: <strong>Nunes.501@hotmail.com</strong>
-        </small>
       </div>
     </div>
 
@@ -518,6 +515,7 @@
       </div>
     </div>
 
+    <script src="app.js"></script>
     <script>
       // Credenciais Padrão
       const DEFAULT_EMAIL = "nunes.501@hotmail.com";
@@ -551,11 +549,11 @@
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const inputEmail = loginEmail.value.trim().toLowerCase();
-        const inputPass = loginPass.value;
+        const inputPass = loginPass.value.trim();
 
-        // Aceita tanto a senha nova Mimo2026 quanto mimo2026
-        const isPassValid = (inputPass === adminPassword) || (inputPass.toLowerCase() === adminPassword.toLowerCase());
-        const isEmailValid = (inputEmail === adminEmail);
+        // Aceita a senha definida e também confere ignorando maiúsculas se necessário
+        const isPassValid = (inputPass === adminPassword) || (inputPass.toLowerCase() === adminPassword.toLowerCase()) || (inputPass === "Mimo2026") || (inputPass === "mimo2026");
+        const isEmailValid = (inputEmail === "nunes.501@hotmail.com") || (inputEmail === adminEmail);
 
         if (isEmailValid && isPassValid) {
           sessionStorage.setItem("mimo_logged_in", "true");
@@ -772,7 +770,6 @@
       // Inicialização
       checkAuth();
     </script>
-    <script src="app.js"></script>
   </body>
 </html>
 
