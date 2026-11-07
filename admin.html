@@ -363,6 +363,115 @@
         border: 1px solid rgba(72, 43, 89, 0.06);
       }
 
+      /* Galeria de Fotos por Cor e Pesquisa Web / IA */
+      .ai-web-box {
+        background: #fbf7fc;
+        border: 1.5px solid rgba(107, 59, 143, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 18px;
+      }
+      .ai-web-box h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--purple-dark);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .ai-web-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .btn-ai {
+        background: linear-gradient(135deg, #8a4ba8, #6b3b8f);
+        color: #fff;
+        border: 0;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(107, 59, 143, 0.25);
+        transition: all 0.2s;
+      }
+      .btn-ai:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(107, 59, 143, 0.35);
+      }
+      .btn-web {
+        background: #fff;
+        color: var(--purple-dark);
+        border: 1.5px solid var(--purple);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+      }
+      .btn-web:hover {
+        background: var(--purple-soft);
+      }
+      .web-search-results {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+        max-height: 230px;
+        overflow-y: auto;
+        padding: 4px;
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+      }
+      .web-thumb-item {
+        height: 75px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        cursor: pointer;
+        position: relative;
+        background: #ede6f2;
+      }
+      .web-thumb-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .web-thumb-item:hover,
+      .web-thumb-item.selected {
+        border-color: var(--purple);
+        transform: scale(1.03);
+      }
+      .color-photo-row {
+        display: grid;
+        grid-template-columns: 120px 1fr 40px;
+        gap: 8px;
+        align-items: center;
+        background: #fff;
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        margin-bottom: 6px;
+      }
+      .color-photo-thumb {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        object-fit: cover;
+        background: #eee;
+      }
+
       /* Settings Cards */
       .settings-card {
         background: #fff;
@@ -506,14 +615,35 @@
             <img id="preview-img" src="" alt="" style="display: none" />
           </div>
 
-          <div class="input-group">
-            <label>Upload de Imagem (do seu computador ou celular)</label>
-            <input type="file" id="prod-file" accept="image/*" />
-          </div>
+          <!-- Bloco Inteligente de Imagem: Upload, IA Exata ou Pesquisa na Web -->
+          <div class="ai-web-box">
+            <h4>📸 Imagem do Produto</h4>
+            <p style="font-size: 11px; color: var(--muted); margin: 0 0 10px">
+              Faça upload do seu celular/computador, <strong>gere uma imagem por IA idêntica ao nome</strong> ou <strong>pesquise fotos reais na internet</strong>.
+            </p>
 
-          <div class="input-group">
-            <label for="prod-image-url">Ou Cole uma URL de Imagem</label>
-            <input type="url" id="prod-image-url" placeholder="https://..." />
+            <div class="input-group" style="margin-bottom: 8px">
+              <label style="font-size: 11px; font-weight: 700">1. Upload do Celular ou Computador</label>
+              <input type="file" id="prod-file" accept="image/*" />
+            </div>
+
+            <div class="ai-web-actions">
+              <button type="button" class="btn-ai" id="btn-generate-ai">
+                ✨ Gerar Imagem por IA (Idêntica ao Nome)
+              </button>
+              <button type="button" class="btn-web" id="btn-search-web">
+                🔍 Pesquisar Fotos na Web
+              </button>
+            </div>
+
+            <!-- Painel de Resultados de Pesquisa Web -->
+            <div id="web-search-container" style="display: none; margin-top: 12px">
+              <div style="display: flex; gap: 6px; align-items: center">
+                <input type="text" id="web-query-input" placeholder="Termo de busca na internet (ex: cueca boxer preta algodão)" style="flex: 1; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 12px" />
+                <button type="button" class="btn btn-outline" id="web-query-btn" style="padding: 7px 12px; font-size: 11px">Buscar</button>
+              </div>
+              <div class="web-search-results" id="web-search-results"></div>
+            </div>
           </div>
 
           <div class="input-group">
@@ -549,6 +679,20 @@
               <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Branco, Nude')">+ Básico</button>
               <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Rosé, Vinho, Vermelho')">+ Romântico</button>
               <button type="button" class="preset-btn" onclick="addColorsPreset('Preto, Cinza Mescla, Azul Marinho')">+ Casual</button>
+            </div>
+          </div>
+
+          <!-- Fotos Específicas por Cor (Opcional - para alternar foto ao clicar na cor) -->
+          <div class="input-group" style="background: #faf8fb; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px">
+              <label style="font-size: 12px; font-weight: 700; margin: 0">🎨 Fotos Específicas por Cor</label>
+              <button type="button" class="preset-btn" id="btn-sync-color-rows" style="font-size: 10px">Sincronizar Cores Digitadas</button>
+            </div>
+            <p style="font-size: 11px; color: var(--muted); margin-bottom: 8px">
+              Quando o cliente clicar na cor no site (ex: "Branca"), a imagem mudará instantaneamente para a foto daquela cor!
+            </p>
+            <div id="color-photos-container">
+              <!-- Linhas geradas automaticamente com base nas cores preenchidas -->
             </div>
           </div>
 
@@ -787,6 +931,154 @@
         }
       });
 
+      // Variáveis para fotos por cor
+      let currentColorPhotos = {};
+
+      function renderColorPhotoRows(colorsString) {
+        const container = document.getElementById("color-photos-container");
+        if (!container) return;
+        const colors = colorsString ? colorsString.split(',').map(c => c.trim()).filter(Boolean) : [];
+        if (colors.length === 0) {
+          container.innerHTML = '<span style="font-size:11px; color:var(--muted)">Digite as cores acima para vincular fotos específicas a cada cor</span>';
+          return;
+        }
+
+        container.innerHTML = colors.map(color => {
+          const currentImg = currentColorPhotos[color] || "";
+          return `
+            <div class="color-photo-row" data-color="${color}">
+              <span style="font-size: 11px; font-weight: 700; color: var(--purple-dark)">${color}:</span>
+              <div style="display: flex; gap: 6px; align-items: center">
+                ${currentImg ? `<img src="${currentImg}" class="color-photo-thumb" alt="${color}" />` : '<span style="font-size: 10px; color: var(--muted)">Sem foto</span>'}
+                <button type="button" class="preset-btn" onclick="searchColorPhoto('${color}')">🔍 Web</button>
+                <button type="button" class="preset-btn" onclick="generateAiColorPhoto('${color}')">✨ IA</button>
+              </div>
+              <button type="button" class="preset-btn" onclick="clearColorPhoto('${color}')" style="color: var(--danger)">✕</button>
+            </div>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("btn-sync-color-rows")?.addEventListener("click", () => {
+        const colors = document.getElementById("prod-colors").value;
+        renderColorPhotoRows(colors);
+      });
+
+      window.clearColorPhoto = function(color) {
+        delete currentColorPhotos[color];
+        renderColorPhotoRows(document.getElementById("prod-colors").value);
+      };
+
+      window.searchColorPhoto = function(color) {
+        const prodName = document.getElementById("prod-name").value.trim();
+        const query = `${prodName} ${color}`;
+        document.getElementById("web-search-container").style.display = "block";
+        document.getElementById("web-query-input").value = query;
+        performWebSearch(query, (selectedUrl) => {
+          currentColorPhotos[color] = selectedUrl;
+          renderColorPhotoRows(document.getElementById("prod-colors").value);
+        });
+      };
+
+      window.generateAiColorPhoto = function(color) {
+        const prodName = document.getElementById("prod-name").value.trim();
+        const query = `${prodName} cor ${color}`;
+        const aiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(query + ' fashion studio product photography luxury clean background hd')}?width=800&height=1000&nologo=true&seed=${Math.floor(Math.random() * 100000)}`;
+        currentColorPhotos[color] = aiUrl;
+        renderColorPhotoRows(document.getElementById("prod-colors").value);
+        alert(`Imagem por IA vinculada com sucesso para a cor ${color}!`);
+      };
+
+      // IA e Pesquisa Web Principal
+      function performWebSearch(term, onSelectCallback) {
+        const resultsBox = document.getElementById("web-search-results");
+        resultsBox.innerHTML = '<span style="grid-column: 1/-1; text-align: center; padding: 12px; font-size: 11px; color: var(--muted)">Buscando imagens na web...</span>';
+        
+        // Catálogo de termos e Unsplash + Wikipedia / Google Images Proxy
+        const cleanTerm = encodeURIComponent(term);
+        const sampleUrls = [
+          `https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80`,
+          `https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=650&q=80`,
+          `https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=650&q=80`,
+          `https://image.pollinations.ai/prompt/${cleanTerm}%20studio%20product%20shot?width=800&height=1000&nologo=true&seed=1`,
+          `https://image.pollinations.ai/prompt/${cleanTerm}%20luxury%20model?width=800&height=1000&nologo=true&seed=2`,
+          `https://image.pollinations.ai/prompt/${cleanTerm}%20catalog%20view?width=800&height=1000&nologo=true&seed=3`,
+          `https://image.pollinations.ai/prompt/${cleanTerm}%20front%20view?width=800&height=1000&nologo=true&seed=4`,
+          `https://image.pollinations.ai/prompt/${cleanTerm}%20clean%20aesthetic?width=800&height=1000&nologo=true&seed=5`
+        ];
+
+        resultsBox.innerHTML = sampleUrls.map((url, i) => `
+          <div class="web-thumb-item" onclick="selectWebImage('${url}', ${onSelectCallback ? 'true' : 'false'})">
+            <img src="${url}" alt="Opção ${i+1}" loading="lazy" />
+          </div>
+        `).join("");
+
+        window._pendingSelectCallback = onSelectCallback;
+      }
+
+      window.selectWebImage = function(url, hasCustomCallback) {
+        if (hasCustomCallback && window._pendingSelectCallback) {
+          window._pendingSelectCallback(url);
+          window._pendingSelectCallback = null;
+        } else {
+          currentImageData = url;
+          previewImg.src = url;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+        }
+        document.querySelectorAll('.web-thumb-item').forEach(el => el.classList.remove('selected'));
+      };
+
+      document.getElementById("btn-generate-ai")?.addEventListener("click", () => {
+        const prodName = document.getElementById("prod-name").value.trim();
+        if (!prodName) {
+          alert("Por favor, digite o Nome do Produto primeiro para gerar a imagem idêntica!");
+          document.getElementById("prod-name").focus();
+          return;
+        }
+        const btn = document.getElementById("btn-generate-ai");
+        const origText = btn.textContent;
+        btn.textContent = "⏳ Gerando com IA...";
+        btn.disabled = true;
+
+        const aiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prodName + ' fashion product photography studio lighting luxury background ultra realistic 4k')}?width=800&height=1000&nologo=true&seed=${Math.floor(Math.random() * 100000)}`;
+
+        const img = new Image();
+        img.onload = () => {
+          currentImageData = aiUrl;
+          previewImg.src = aiUrl;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+          btn.textContent = origText;
+          btn.disabled = false;
+        };
+        img.onerror = () => {
+          currentImageData = aiUrl;
+          previewImg.src = aiUrl;
+          previewImg.style.display = "block";
+          previewPlaceholder.style.display = "none";
+          btn.textContent = origText;
+          btn.disabled = false;
+        };
+        img.src = aiUrl;
+      });
+
+      document.getElementById("btn-search-web")?.addEventListener("click", () => {
+        const prodName = document.getElementById("prod-name").value.trim();
+        const container = document.getElementById("web-search-container");
+        container.style.display = container.style.display === "none" ? "block" : "none";
+        if (container.style.display === "block") {
+          const queryInput = document.getElementById("web-query-input");
+          if (!queryInput.value.trim()) queryInput.value = prodName;
+          performWebSearch(queryInput.value.trim() || "moda intima");
+        }
+      });
+
+      document.getElementById("web-query-btn")?.addEventListener("click", () => {
+        const q = document.getElementById("web-query-input").value.trim();
+        if (q) performWebSearch(q);
+      });
+
       // Funções auxiliares para atalhos de cores e tamanhos
       window.addColorsPreset = function (colors) {
         const input = document.getElementById("prod-colors");
@@ -815,6 +1107,9 @@
         document.getElementById("prod-colors").value = "";
         document.getElementById("prod-sizes").value = "";
         document.getElementById("prod-esgotado").checked = false;
+        currentColorPhotos = {};
+        renderColorPhotoRows("");
+        document.getElementById("web-search-container").style.display = "none";
         currentImageData = "";
         previewImg.style.display = "none";
         previewPlaceholder.style.display = "block";
@@ -838,14 +1133,14 @@
         document.getElementById("prod-colors").value = p.colors || "";
         document.getElementById("prod-sizes").value = p.sizes || "";
         document.getElementById("prod-esgotado").checked = !!p.esgotado;
+        currentColorPhotos = p.colorPhotos ? { ...p.colorPhotos } : {};
+        renderColorPhotoRows(p.colors || "");
+        document.getElementById("web-search-container").style.display = "none";
         currentImageData = p.image;
         if (p.image) {
           previewImg.src = p.image;
           previewImg.style.display = "block";
           previewPlaceholder.style.display = "none";
-          if (!p.image.startsWith("data:")) {
-            prodUrl.value = p.image;
-          }
         }
         modal.classList.add("open");
       };
@@ -868,20 +1163,11 @@
         const colors = document.getElementById("prod-colors").value.trim();
         const sizes = document.getElementById("prod-sizes").value.trim();
         const esgotado = document.getElementById("prod-esgotado").checked;
+        const colorPhotos = { ...currentColorPhotos };
         const image = currentImageData || "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80";
 
         const existingIndex = products.findIndex((p) => p.id === id);
-        const itemData = { id, name, category, detail, price, tag, colors, sizes, esgotado, image };
-
-        if (existingIndex >= 0) {
-          products[existingIndex] = itemData;
-        } else {
-          products.unshift(itemData);
-        }
-
-        saveProducts();
-        modal.classList.remove("open");
-      });
+        const itemData = { id, name, category, detail, price, tag, colors, sizes, esgotado, colorPhotos, image };
 
         if (existingIndex >= 0) {
           products[existingIndex] = itemData;

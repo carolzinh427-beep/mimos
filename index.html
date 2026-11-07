@@ -50,6 +50,18 @@
       </div>
     </header>
 
+    <!-- BARRA DE PESQUISA RÁPIDA NO TOPO -->
+    <div class="top-search-banner">
+      <div class="section-shell">
+        <form class="top-search-form" id="top-search-form" onsubmit="event.preventDefault();">
+          <span class="top-search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input class="top-search-input" id="top-search-input" type="search" placeholder="O que você procura hoje? (ex: camisola, lingerie, cueca, pijama, biquíni...)" />
+        </form>
+      </div>
+    </div>
+
     <main id="inicio">
       <!-- SESSÃO 1: HERO SLIDER CAROUSEL (Coleções de Verão, Novidades, Queima de Estoque) -->
       <section class="section-wrapper bg-beige hero-slider-wrapper" id="hero-carousel" aria-label="Destaques Mimo Íntimo">
@@ -145,30 +157,51 @@
         </div>
       </section>
 
-      <!-- SESSÃO 2: CATEGORIAS (Fundo Branco) -->
-      <section class="section-wrapper bg-white" id="categorias" aria-label="Categorias">
+      <!-- SESSÃO 2: CATEGORIAS EM CÍRCULOS (Abaixo do Hero) -->
+      <section class="section-wrapper bg-white circle-categories-wrapper" id="categorias" aria-label="Categorias em Círculos">
         <div class="section-shell">
-          <div class="category-strip">
-            <div class="category-card" data-category="Feminino" role="button" tabindex="0">
-              <span class="category-icon">◌</span>
-              <strong>Feminino</strong>
-              <small>Lingerie, pijamas & loungewear</small>
-            </div>
-            <div class="category-card" data-category="Masculino" role="button" tabindex="0">
-              <span class="category-icon">⌁</span>
-              <strong>Masculino</strong>
-              <small>Pijamas, cuecas & conforto</small>
-            </div>
-            <div class="category-card" data-category="Infantil" role="button" tabindex="0">
-              <span class="category-icon">✦</span>
-              <strong>Infantil</strong>
-              <small>Pijamas lúdicos & toque macio</small>
-            </div>
-            <div class="category-card" data-category="Moda Praia" role="button" tabindex="0">
-              <span class="category-icon">◒</span>
-              <strong>Moda Praia</strong>
-              <small>Biquínis, maiôs & sungas</small>
-            </div>
+          <div class="circle-categories">
+            <button class="circle-cat-item active" data-category="Todos" type="button">
+              <div class="circle-cat-thumb">
+                <img src="images/conjunto-rendado.jpg" alt="Todos os produtos" />
+              </div>
+              <span class="circle-cat-label">Todos</span>
+            </button>
+            <button class="circle-cat-item" data-category="Feminino" type="button">
+              <div class="circle-cat-thumb">
+                <img src="images/camisola-charlize.jpg" alt="Feminino" />
+              </div>
+              <span class="circle-cat-label">Feminino</span>
+            </button>
+            <button class="circle-cat-item" data-category="Masculino" type="button">
+              <div class="circle-cat-thumb">
+                <img src="images/pijama-americano.jpg" alt="Masculino" />
+              </div>
+              <span class="circle-cat-label">Masculino</span>
+            </button>
+            <button class="circle-cat-item" data-category="Infantil" type="button">
+              <div class="circle-cat-thumb">
+                <img src="images/pijama-infantil.jpg" alt="Kids / Infantil" />
+              </div>
+              <span class="circle-cat-label">Kids</span>
+            </button>
+            <button class="circle-cat-item" data-category="Moda Praia" type="button">
+              <div class="circle-cat-thumb">
+                <img src="images/biquini-cortininha.jpg" alt="Moda Praia" />
+              </div>
+              <span class="circle-cat-label">Moda Praia</span>
+            </button>
+          </div>
+
+          <!-- FILTRO RÁPIDO DE MARCAS / ESTILOS PARCEIROS -->
+          <div class="brands-strip">
+            <span class="brands-title">Marcas & Coleções:</span>
+            <button class="brand-chip active" data-brand="Todas">Todas</button>
+            <button class="brand-chip" data-brand="Mimo Íntimo">Mimo Íntimo</button>
+            <button class="brand-chip" data-brand="De Chelles">De Chelles</button>
+            <button class="brand-chip" data-brand="Lupo">Lupo</button>
+            <button class="brand-chip" data-brand="Hope">Hope</button>
+            <button class="brand-chip" data-brand="Recco">Recco</button>
           </div>
         </div>
       </section>
@@ -277,6 +310,52 @@
         </div>
       </div>
     </footer>
+
+    <!-- MODAL DE DETALHES DO PRODUTO (COMO UMA PÁGINA COM URL PRÓPRIA #produto-ID) -->
+    <div class="product-modal-view" id="product-detail-modal" aria-hidden="true">
+      <div class="product-modal-card">
+        <button class="product-modal-close" id="modal-detail-close" type="button" aria-label="Fechar detalhes">✕</button>
+        <div class="product-modal-gallery">
+          <img id="modal-detail-img" src="" alt="Produto Mimo Íntimo" />
+        </div>
+        <div class="product-modal-details">
+          <span class="modal-category-badge" id="modal-detail-category">Feminino</span>
+          <h2 id="modal-detail-title">Nome do Produto</h2>
+          
+          <div class="product-modal-price">
+            <small>Valor à vista ou Pix</small>
+            <span id="modal-detail-price">R$ 0,00</span>
+          </div>
+
+          <div class="modal-section-title">Descrição & Detalhes</div>
+          <p class="modal-desc-text" id="modal-detail-desc"></p>
+
+          <div id="modal-colors-wrap">
+            <div class="modal-section-title">Cores Disponíveis</div>
+            <div class="modal-chips-row" id="modal-detail-colors"></div>
+          </div>
+
+          <div id="modal-sizes-wrap">
+            <div class="modal-section-title">Tamanhos / Numeração</div>
+            <div class="modal-chips-row" id="modal-detail-sizes"></div>
+          </div>
+
+          <!-- RETIRADA NA LOJA ASA SUL -->
+          <div class="modal-pickup-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div>
+              <strong>Disponível para Retirada na Loja Física</strong><br />
+              CLS 107 Bloco C Loja 26 · Asa Sul, Brasília (ou envio rápido por motoboy)
+            </div>
+          </div>
+
+          <a class="modal-action-btn" id="modal-detail-wabtn" href="#" target="_blank" rel="noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span id="modal-detail-btntext">Pedir Peça no WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <!-- GAVETA DE FAVORITOS -->
     <div class="drawer-overlay" id="drawer-overlay"></div>

@@ -253,64 +253,36 @@ function renderProducts() {
   grid.innerHTML = visible.map((product) => {
     const isFav = favorites.includes(product.id);
     const isEsgotado = !!product.esgotado;
-    const tagDisplay = isEsgotado ? 'ESGOTADO' : (product.tag || 'Destaque');
-    const tagClass = isEsgotado ? 'product-tag tag-esgotado' : 'product-tag';
 
-    // Bloco de Variantes (Cores e Tamanhos / Numeração)
-    let variantsHtml = '';
-    if (product.colors || product.sizes) {
-      const colorsList = product.colors ? product.colors.split(',').map(c => c.trim()).filter(Boolean) : [];
-      const sizesList = product.sizes ? product.sizes.split(',').map(s => s.trim()).filter(Boolean) : [];
-
-      variantsHtml = `
-        <div class="product-variants">
-          ${colorsList.length ? `
-            <div class="product-variants-row">
-              <span class="product-variants-label">Cores:</span>
-              ${colorsList.map(c => `<span class="variant-pill">${c}</span>`).join('')}
-            </div>
-          ` : ''}
-          ${sizesList.length ? `
-            <div class="product-variants-row">
-              <span class="product-variants-label">Tamanhos:</span>
-              ${sizesList.map(s => `<span class="variant-pill">${s}</span>`).join('')}
-            </div>
-          ` : ''}
-        </div>
-      `;
+    // Apenas se tiver destaque especial ou esgotado
+    let tagHtml = '';
+    if (isEsgotado) {
+      tagHtml = '<span class="product-tag tag-esgotado">ESGOTADO</span>';
+    } else if (product.tag && product.tag !== 'Destaque') {
+      tagHtml = `<span class="product-tag">${product.tag}</span>`;
     }
 
     return `
-      <article class="product-card ${isEsgotado ? 'is-esgotado' : ''}" data-id="${product.id}">
+      <article class="product-card ${isEsgotado ? 'is-esgotado' : ''}" data-id="${product.id}" onclick="openProductModal('${product.id}')">
         <div class="product-image-wrap">
           <img src="${product.image}" alt="${product.name}" loading="lazy" />
-          <span class="${tagClass}">${tagDisplay}</span>
-          <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}">
+          ${tagHtml}
+          <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}" onclick="event.stopPropagation();">
             ${isFav ? '♥' : '♡'}
           </button>
         </div>
         <div class="product-info">
-          <div class="product-meta">
-            <span class="product-category">${product.category}</span>
-          </div>
           <h3>${product.name}</h3>
-          <p>${product.detail || ''}</p>
-          ${variantsHtml}
           <div class="product-bottom">
             <div class="product-price">
-              <small>${isEsgotado ? 'Indisponível' : 'Valor'}</small>
               <strong style="${isEsgotado ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${formatPrice(product.price)}</strong>
             </div>
-            ${isEsgotado ? `
-              <span class="product-wa-btn btn-disabled" title="Peça esgotada no momento">
-                <span>Esgotado</span>
-              </span>
-            ` : `
-              <a class="product-wa-btn" href="${getWaProductUrl(product)}" target="_blank" rel="noreferrer">
-                <svg width="14" height="14" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span class="mobile-tap-hint">Ver detalhes ↗</span>
+            ${!isEsgotado ? `
+              <a class="product-wa-btn" href="${getWaProductUrl(product)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation();">
                 <span>Pedir</span>
               </a>
-            `}
+            ` : ''}
           </div>
         </div>
       </article>
@@ -358,6 +330,188 @@ categoryCards.forEach((card) => {
     selectCategoryFilter(card.dataset.category);
   });
 });
+
+// Barra de Pesquisa Rápida no Topo
+const topSearchInput = document.getElementById("top-search-input");
+if (topSearchInput) {
+  topSearchInput.addEventListener("input", () => {
+    if (search) search.value = topSearchInput.value;
+    visibleCount = 12;
+    renderProducts();
+    const catalogEl = document.querySelector("#catalogo");
+    if (catalogEl && topSearchInput.value.trim().length > 1) {
+      catalogEl.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+}
+
+// Clique nas Categorias em Círculos
+document.querySelectorAll(".circle-cat-item").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".circle-cat-item").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectCategoryFilter(btn.dataset.category);
+  });
+});
+
+// Filtro por Marcas Parceiras
+document.querySelectorAll(".brand-chip").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".brand-chip").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const brand = btn.dataset.brand;
+    if (brand === "Todas") {
+      if (search) search.value = "";
+    } else {
+      if (search) search.value = brand;
+    }
+    visibleCount = 12;
+    renderProducts();
+    const catalogEl = document.querySelector("#catalogo");
+    if (catalogEl) catalogEl.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// =================================================================
+// MODAL DE DETALHES DO PRODUTO (URL PRÓPRIA #produto-ID)
+// =================================================================
+const detailModal = document.getElementById("product-detail-modal");
+const detailCloseBtn = document.getElementById("modal-detail-close");
+let currentSelectedColor = "";
+
+function openProductModal(id, skipHash) {
+  const product = products.find(p => p.id === id);
+  if (!product || !detailModal) return;
+
+  if (!skipHash) {
+    history.pushState(null, "", `#produto-${id}`);
+  }
+
+  document.getElementById("modal-detail-title").textContent = product.name;
+  document.getElementById("modal-detail-category").textContent = product.category;
+  document.getElementById("modal-detail-desc").textContent = product.detail || "Peça de alta qualidade selecionada com carinho pela Mimo Íntimo na Asa Sul.";
+  document.getElementById("modal-detail-price").textContent = formatPrice(product.price);
+  
+  const modalImg = document.getElementById("modal-detail-img");
+  modalImg.src = product.image;
+  modalImg.alt = product.name;
+
+  // Renderizar Cores clicáveis que trocam a foto instantaneamente!
+  const colorsWrap = document.getElementById("modal-colors-wrap");
+  const colorsContainer = document.getElementById("modal-detail-colors");
+  const colorsList = product.colors ? product.colors.split(",").map(c => c.trim()).filter(Boolean) : [];
+
+  if (colorsList.length > 0) {
+    colorsWrap.style.display = "block";
+    currentSelectedColor = colorsList[0];
+    colorsContainer.innerHTML = colorsList.map((color, i) => `
+      <button type="button" class="modal-chip ${i === 0 ? 'selected' : ''}" style="cursor: pointer; transition: all 0.2s;" onclick="switchProductColor('${product.id}', '${color}')">
+        ${color}
+      </button>
+    `).join("");
+
+    // Se já tiver foto da primeira cor
+    if (product.colorPhotos && product.colorPhotos[currentSelectedColor]) {
+      modalImg.src = product.colorPhotos[currentSelectedColor];
+    }
+  } else {
+    colorsWrap.style.display = "none";
+    currentSelectedColor = "";
+  }
+
+  // Renderizar Tamanhos / Numeração
+  const sizesWrap = document.getElementById("modal-sizes-wrap");
+  const sizesContainer = document.getElementById("modal-detail-sizes");
+  const sizesList = product.sizes ? product.sizes.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+  if (sizesList.length > 0) {
+    sizesWrap.style.display = "block";
+    sizesContainer.innerHTML = sizesList.map(size => `<span class="modal-chip">${size}</span>`).join("");
+  } else {
+    sizesWrap.style.display = "none";
+  }
+
+  // Botão de Pedido WhatsApp
+  const waBtn = document.getElementById("modal-detail-wabtn");
+  const waText = document.getElementById("modal-detail-btntext");
+  if (product.esgotado) {
+    waBtn.classList.add("btn-disabled");
+    waBtn.removeAttribute("href");
+    waText.textContent = "Peça Esgotada no Momento";
+  } else {
+    waBtn.classList.remove("btn-disabled");
+    waText.textContent = "Pedir Peça no WhatsApp";
+    updateModalWaLink(product);
+  }
+
+  detailModal.classList.add("open");
+  detailModal.setAttribute("aria-hidden", "false");
+}
+
+function updateModalWaLink(product) {
+  const waBtn = document.getElementById("modal-detail-wabtn");
+  if (!waBtn) return;
+  let variantsInfo = "";
+  if (currentSelectedColor) variantsInfo += `\nCor escolhida: *${currentSelectedColor}*`;
+  if (product.sizes) variantsInfo += `\nTamanhos: ${product.sizes}`;
+  const text = `Olá! Vi no site da Mimo Íntimo e gostaria de reservar/pedir:\n*${product.name}* (${formatPrice(product.price)})\nCategoria: ${product.category}${variantsInfo}\nGostaria de retirar na loja da Asa Sul ou consultar envio!`;
+  waBtn.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
+}
+
+// Troca dinâmica da foto ao clicar na cor!
+window.switchProductColor = function(productId, color) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  currentSelectedColor = color;
+
+  document.querySelectorAll("#modal-detail-colors .modal-chip").forEach(chip => {
+    chip.style.borderColor = chip.textContent.trim() === color ? "var(--purple)" : "rgba(107, 59, 143, 0.2)";
+    chip.style.background = chip.textContent.trim() === color ? "var(--purple-soft)" : "#faf7f8";
+  });
+
+  const modalImg = document.getElementById("modal-detail-img");
+  // Se tiver foto específica cadastrada no admin para aquela cor:
+  if (product.colorPhotos && product.colorPhotos[color]) {
+    modalImg.src = product.colorPhotos[color];
+  } else {
+    // Busca inteligente com IA para a cor específica
+    const colorAiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(product.name + ' cor ' + color + ' lingerie studio product shot')}?width=800&height=1000&nologo=true`;
+    modalImg.src = colorAiUrl;
+  }
+
+  updateModalWaLink(product);
+};
+
+function closeProductModal() {
+  if (!detailModal) return;
+  detailModal.classList.remove("open");
+  detailModal.setAttribute("aria-hidden", "true");
+  if (window.location.hash.startsWith("#produto-")) {
+    history.pushState(null, "", window.location.pathname);
+  }
+}
+
+if (detailCloseBtn) detailCloseBtn.addEventListener("click", closeProductModal);
+if (detailModal) {
+  detailModal.addEventListener("click", (e) => {
+    if (e.target === detailModal) closeProductModal();
+  });
+}
+
+// Abertura automática se a URL contiver #produto-ID
+window.addEventListener("popstate", checkUrlHashProduct);
+window.addEventListener("DOMContentLoaded", checkUrlHashProduct);
+
+function checkUrlHashProduct() {
+  const hash = window.location.hash;
+  if (hash.startsWith("#produto-")) {
+    const id = hash.replace("#produto-", "");
+    openProductModal(id, true);
+  }
+}
+
+// Disponibiliza função globalmente para chamadas inline dos cards
+window.openProductModal = openProductModal;
 
 // Busca e Carregar Mais
 if (search) {
