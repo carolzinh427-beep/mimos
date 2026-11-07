@@ -1,12 +1,15 @@
 // Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
 // Carrega produtos (localStorage > fallback inicial atualizado)
-const CATALOG_VERSION = "v4-lupo-loba-catalog";
+const CATALOG_VERSION = "v10-official-lupo-loba-2026";
 const savedVersion = localStorage.getItem("mimo_catalog_version");
 let savedProducts = null;
 
 if (savedVersion === CATALOG_VERSION) {
   try {
-    savedProducts = JSON.parse(localStorage.getItem("mimo_custom_products") || "null");
+    const parsed = JSON.parse(localStorage.getItem("mimo_custom_products") || "null");
+    if (Array.isArray(parsed) && parsed.length >= 60) {
+      savedProducts = parsed;
+    }
   } catch (e) {}
 }
 
@@ -499,19 +502,32 @@ window.switchProductColor = function(productId, color) {
 
   const modalImg = document.getElementById("modal-detail-img");
   if (modalImg) {
+    let targetSrc = "";
     if (product.colorPhotos && product.colorPhotos[color]) {
-      modalImg.src = product.colorPhotos[color];
+      targetSrc = product.colorPhotos[color];
     } else {
       // Gera automaticamente a imagem idêntica ao produto na cor respectiva
       const prompt = `${product.name} ${product.brand || ''} na cor ${color}, fotografia profissional de catálogo em estúdio fotográfico, fundo branco limpo, iluminação de moda, 4k hd`;
-      const colorAiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=1000&nologo=true`;
-      modalImg.src = colorAiUrl;
+      targetSrc = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=1000&nologo=true`;
       if (!product.colorPhotos) product.colorPhotos = {};
-      product.colorPhotos[color] = colorAiUrl;
+      product.colorPhotos[color] = targetSrc;
       try {
         localStorage.setItem("mimo_custom_products", JSON.stringify(products));
       } catch (e) {}
     }
+
+    modalImg.style.transition = "opacity 0.25s ease";
+    modalImg.style.opacity = "0.4";
+    const temp = new Image();
+    temp.onload = () => {
+      modalImg.src = targetSrc;
+      modalImg.style.opacity = "1";
+    };
+    temp.onerror = () => {
+      modalImg.src = targetSrc;
+      modalImg.style.opacity = "1";
+    };
+    temp.src = targetSrc;
   }
 
   updateModalWaLink(product);

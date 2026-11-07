@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cinzel:wght@400..700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet" />
     <style>
       :root {
         --purple: #6b3b8f;
@@ -611,7 +611,10 @@
             <h3>Gerenciar Catálogo</h3>
             <p style="font-size: 13px; color: var(--muted)" id="products-count-label">Carregando peças...</p>
           </div>
-          <button class="btn btn-primary" id="open-add-modal">+ Novo Produto</button>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline" onclick="resetCatalogToDefault()">🔄 Sincronizar Catálogo Oficial (66 Peças)</button>
+            <button class="btn btn-primary" id="open-add-modal">+ Novo Produto</button>
+          </div>
         </div>
 
         <div id="products-list" class="products-grid">
@@ -923,7 +926,7 @@
       let products = [];
 
       function loadAdminProducts() {
-        const currentVersion = "v4-lupo-loba-catalog";
+        const currentVersion = "v10-official-lupo-loba-2026";
         const savedVersion = localStorage.getItem("mimo_catalog_version");
         let stored = null;
         try {
@@ -932,7 +935,7 @@
           stored = null;
         }
 
-        if (savedVersion === currentVersion && Array.isArray(stored) && stored.length > 0) {
+        if (savedVersion === currentVersion && Array.isArray(stored) && stored.length >= 60) {
           products = stored;
         } else if (window.defaultProducts && window.defaultProducts.length > 0) {
           products = [...window.defaultProducts];
@@ -947,6 +950,20 @@
         }
         renderAdminGrid();
       }
+
+      window.resetCatalogToDefault = function () {
+        if (confirm("Deseja sincronizar todas as 66 peças oficiais (Lupo, Loba, Lobinha e Moda Praia) com fotos fiéis e exatas?")) {
+          if (window.defaultProducts && window.defaultProducts.length > 0) {
+            products = [...window.defaultProducts];
+            localStorage.setItem("mimo_catalog_version", "v10-official-lupo-loba-2026");
+            localStorage.setItem("mimo_custom_products", JSON.stringify(products));
+            renderAdminGrid();
+            alert("Catálogo sincronizado com sucesso! Todas as 66 peças e fotos oficiais foram carregadas.");
+          } else {
+            alert("Erro: lista padrão de produtos não encontrada.");
+          }
+        }
+      };
 
       function saveProducts() {
         localStorage.setItem("mimo_custom_products", JSON.stringify(products));
