@@ -1,188 +1,4 @@
 // Catálogo Mimo Íntimo - Produtos com Sessões, Fotos Reais e Valores
-const initialProducts = [
-  // --- FEMININO ---
-  {
-    id: "fem-1",
-    name: "Conjunto Rendado Sublime",
-    category: "Feminino",
-    detail: "Renda antialérgica com suporte suave e caimento impecável",
-    price: 129.90,
-    image: "images/conjunto-rendado.jpg",
-    tag: "Destaque"
-  },
-  {
-    id: "fem-2",
-    name: "Camisola Charlize em Liganete",
-    category: "Feminino",
-    detail: "Toque de seda geladinho com renda delicada no decote",
-    price: 139.90,
-    image: "images/camisola-charlize.jpg",
-    tag: "Queridinho"
-  },
-  {
-    id: "fem-3",
-    name: "Calça Legging Conforto Sem Costura",
-    category: "Feminino",
-    detail: "Cintura alta modeladora, compressão ideal e toque macio aveludado",
-    price: 119.90,
-    image: "images/calca-legging.jpg",
-    tag: "Novo"
-  },
-  {
-    id: "fem-4",
-    name: "Shortdoll Pérola em Cetim",
-    category: "Feminino",
-    detail: "Alças reguláveis, leveza e acabamento acetinado de alto padrão",
-    price: 109.90,
-    image: "images/shortdoll-cetim.jpg",
-    tag: "Luxo"
-  },
-  {
-    id: "fem-5",
-    name: "Sutiã Comfort Sem Costura",
-    category: "Feminino",
-    detail: "Liberdade sem aros e máxima sustentação anatômica",
-    price: 79.90,
-    image: "images/sutia-sem-costura.jpg",
-    tag: "Essencial"
-  },
-  {
-    id: "fem-6",
-    name: "Robe Luxo em Viscose com Renda",
-    category: "Feminino",
-    detail: "Manga flare fluída com faixa para amarração delicada",
-    price: 169.90,
-    image: "images/robe-luxo.jpg",
-    tag: "Exclusivo"
-  },
-  {
-    id: "fem-7",
-    name: "Kit 3 Calcinhas Invisíveis Corte a Laser",
-    category: "Feminino",
-    detail: "Não marca sob vestidos e calças finas, toque segunda pele",
-    price: 74.90,
-    image: "images/kit-calcinhas.jpg",
-    tag: "Mais Vendido"
-  },
-
-  // --- MASCULINO ---
-  {
-    id: "masc-1",
-    name: "Kit 3 Cuecas Boxer Cotton Premium",
-    category: "Masculino",
-    detail: "Algodão com elastano, forro duplo e elástico macio",
-    price: 89.90,
-    image: "images/cuecas-boxer.jpg",
-    tag: "Mais Vendido"
-  },
-  {
-    id: "masc-2",
-    name: "Pijama Americano Masculino Curto",
-    category: "Masculino",
-    detail: "Gola colarinho com botões frontais e cós elástico com cordão",
-    price: 139.90,
-    image: "images/pijama-americano.jpg",
-    tag: "Novo"
-  },
-  {
-    id: "masc-3",
-    name: "Pijama Longo Classic Confort",
-    category: "Masculino",
-    detail: "Algodão premium respirável, caimento solto e térmico",
-    price: 159.90,
-    image: "images/pijama-longo-masculino.jpg",
-    tag: "Destaque"
-  },
-  {
-    id: "masc-4",
-    name: "Camiseta Loungewear Conforto",
-    category: "Masculino",
-    detail: "Perfeita para relaxar em casa com elegância e frescor",
-    price: 79.90,
-    image: "images/camiseta-loungewear.jpg",
-    tag: "Básico"
-  },
-
-  // --- INFANTIL ---
-  {
-    id: "inf-1",
-    name: "Pijama Infantil Algodão Doce",
-    category: "Infantil",
-    detail: "100% algodão hipoalergênico com estampa delicada",
-    price: 79.90,
-    image: "images/pijama-infantil.jpg",
-    tag: "Destaque"
-  },
-  {
-    id: "inf-2",
-    name: "Shortdoll Juvenil Estrelas",
-    category: "Infantil",
-    detail: "Tecido levinho, super macio para noites de descanso feliz",
-    price: 69.90,
-    image: "images/shortdoll-juvenil.jpg",
-    tag: "Queridinho"
-  },
-  {
-    id: "inf-3",
-    name: "Macacão Pijama Plush Conforto",
-    category: "Infantil",
-    detail: "Proteção térmica aconchegante com zíper protegido",
-    price: 94.90,
-    image: "images/macacao-infantil.jpg",
-    tag: "Novo"
-  },
-  {
-    id: "inf-4",
-    name: "Kit 4 Peças Íntimas Kids",
-    category: "Infantil",
-    detail: "Elásticos delicados que não marcam e garantem liberdade",
-    price: 59.90,
-    image: "images/pecas-intimas-kids.jpg",
-    tag: "Essencial"
-  },
-
-  // --- MODA PRAIA ---
-  {
-    id: "praia-1",
-    name: "Biquíni Cortininha Textura Canelada",
-    category: "Moda Praia",
-    detail: "Tecido texturizado com proteção solar UV50+ e forro duplo",
-    price: 149.90,
-    image: "images/biquini-cortininha.jpg",
-    tag: "Destaque"
-  },
-  {
-    id: "praia-2",
-    name: "Maiô Decote V Transpassado",
-    category: "Moda Praia",
-    detail: "Efeito modelador elegante que também pode ser usado como body",
-    price: 179.90,
-    image: "images/maio-transpassado.jpg",
-    tag: "Exclusivo"
-  },
-  {
-    id: "praia-3",
-    name: "Saída de Praia em Laise Fluída",
-    category: "Moda Praia",
-    detail: "Caimento arejado e sofisticado com amarração na cintura",
-    price: 139.90,
-    image: "images/saida-praia.jpg",
-    tag: "Novo"
-  },
-  {
-    id: "praia-4",
-    name: "Sunga Boxer Beachwear",
-    category: "Moda Praia",
-    detail: "Secagem ultra rápida, forro anatômico e cordão interno",
-    price: 89.90,
-    image: "images/sunga-boxer.jpg",
-    tag: "Verão 2026"
-  }
-];
-
-// Disponibiliza produtos iniciais globalmente
-window.defaultProducts = initialProducts;
-
 // Carrega produtos (localStorage > fallback inicial atualizado)
 const CATALOG_VERSION = "v3-exact-images";
 const savedVersion = localStorage.getItem("mimo_catalog_version");
@@ -194,7 +10,8 @@ if (savedVersion === CATALOG_VERSION) {
   } catch (e) {}
 }
 
-let products = (savedProducts && savedProducts.length > 0) ? savedProducts : [...initialProducts];
+const defaultList = (typeof window !== "undefined" && window.defaultProducts) ? window.defaultProducts : [];
+let products = (savedProducts && savedProducts.length > 0) ? savedProducts : [...defaultList];
 localStorage.setItem("mimo_catalog_version", CATALOG_VERSION);
 localStorage.setItem("mimo_custom_products", JSON.stringify(products));
 
@@ -528,7 +345,34 @@ if (loadMoreBtn) {
   });
 }
 
-// Gerenciamento de Favoritos
+// Gerenciamento de Favoritos e Seleção para Pix
+let selectedFavIds = new Set(favorites);
+
+function updateFavSubtotal() {
+  const favProducts = products.filter((p) => favorites.includes(p.id));
+  const selectedProducts = favProducts.filter((p) => selectedFavIds.has(p.id));
+  const subtotal = selectedProducts.reduce((sum, p) => sum + Number(p.price || 0), 0);
+
+  const subtotalWrap = document.getElementById("drawer-subtotal-wrap");
+  const subtotalVal = document.getElementById("drawer-subtotal-value");
+  const btnPayPix = document.getElementById("btn-pay-pix");
+
+  if (subtotalWrap && subtotalVal && btnPayPix) {
+    if (selectedProducts.length > 0) {
+      subtotalWrap.style.display = "flex";
+      subtotalVal.textContent = formatPrice(subtotal);
+      btnPayPix.style.display = "flex";
+      btnPayPix.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 512 512" fill="currentColor"><path d="M112.5 137.4l82.8-82.8c31.2-31.2 82-31.2 113.1 0l82.8 82.8c31.2 31.2 31.2 82 0 113.1l-82.8 82.8c-31.2 31.2-82 31.2-113.1 0l-82.8-82.8c-31.2-31.2-31.2-82 0-113.1zm113.1 27.2c-15.6 15.6-15.6 41 0 56.6l3.8 3.8c15.6 15.6 41 15.6 56.6 0l3.8-3.8c15.6-15.6 15.6-41 0-56.6l-3.8-3.8c-15.6-15.6-41-15.6-56.6 0l-3.8 3.8z"/></svg>
+        <span>Pagar Selecionados por Pix (${selectedProducts.length})</span>
+      `;
+    } else {
+      subtotalWrap.style.display = "none";
+      btnPayPix.style.display = "none";
+    }
+  }
+}
+
 function updateFavoritesUI() {
   if (!favBadge || !drawerCount || !drawerItems) return;
 
@@ -538,13 +382,26 @@ function updateFavoritesUI() {
   const favProducts = products.filter((p) => favorites.includes(p.id));
   drawerCount.textContent = `${favProducts.length} ${favProducts.length === 1 ? 'item salvo' : 'itens salvos'}`;
 
+  // Garante que novos favoritos venham selecionados por padrão
+  favorites.forEach((id) => {
+    if (!selectedFavIds.has(id)) selectedFavIds.add(id);
+  });
+  // Remove IDs que não são mais favoritos
+  [...selectedFavIds].forEach((id) => {
+    if (!favorites.includes(id)) selectedFavIds.delete(id);
+  });
+
   if (favProducts.length === 0) {
     drawerItems.innerHTML = '<p class="drawer-empty">Você ainda não favoritou nenhuma peça. Clique no coração ♡ nos produtos para salvar seus favoritos</p>';
     if (sendFavsWa) sendFavsWa.style.display = "none";
+    updateFavSubtotal();
   } else {
     if (sendFavsWa) sendFavsWa.style.display = "inline-flex";
     drawerItems.innerHTML = favProducts.map((p) => `
       <div class="drawer-item">
+        <label class="drawer-item-select" title="Selecionar para Pix">
+          <input type="checkbox" class="fav-checkbox" data-id="${p.id}" ${selectedFavIds.has(p.id) ? 'checked' : ''} aria-label="Selecionar para pagamento" />
+        </label>
         <img src="${p.image}" alt="${p.name}" />
         <div class="drawer-item-info">
           <strong>${p.name}</strong>
@@ -557,8 +414,112 @@ function updateFavoritesUI() {
     const listText = favProducts.map((p) => `• ${p.name} (${formatPrice(p.price)})`).join("\n");
     const fullText = `Olá! Salvei os seguintes itens no catálogo da Mimo Íntimo e gostaria de consultar tamanhos e cores:\n\n${listText}\n\nComo podemos proceder?`;
     if (sendFavsWa) sendFavsWa.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(fullText)}`;
+
+    updateFavSubtotal();
   }
 }
+
+// Alteração de seleção das checkboxes no drawer
+if (drawerItems) {
+  drawerItems.addEventListener("change", (e) => {
+    const cb = e.target.closest(".fav-checkbox");
+    if (!cb) return;
+    const id = cb.dataset.id;
+    if (cb.checked) {
+      selectedFavIds.add(id);
+    } else {
+      selectedFavIds.delete(id);
+    }
+    updateFavSubtotal();
+  });
+}
+
+// Fluxo de Pagamento Pix com Conferência no WhatsApp
+const btnPayPix = document.getElementById("btn-pay-pix");
+if (btnPayPix) {
+  btnPayPix.addEventListener("click", () => {
+    const favProducts = products.filter((p) => favorites.includes(p.id));
+    const selectedProducts = favProducts.filter((p) => selectedFavIds.has(p.id));
+    if (selectedProducts.length === 0) {
+      alert("Por favor, selecione pelo menos 1 peça para pagar por Pix!");
+      return;
+    }
+
+    const itemsList = selectedProducts.map(p => `• ${p.name} - ${formatPrice(p.price)}`).join("\n");
+    const total = selectedProducts.reduce((sum, p) => sum + Number(p.price || 0), 0);
+    const msg = `Olá! Gostaria de conferir se vocês têm em estoque na loja física da Asa Sul as seguintes peças para eu realizar o pagamento via Pix:\n\n${itemsList}\n\n*Total Selecionado:* ${formatPrice(total)}\n\nPoderiam verificar a disponibilidade antes de eu transferir?`;
+
+    const wppBtn = document.getElementById("pix-stock-wpp-btn");
+    if (wppBtn) {
+      wppBtn.href = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(msg)}`;
+    }
+
+    const stockPopup = document.getElementById("pix-stock-popup");
+    if (stockPopup) stockPopup.classList.add("open");
+  });
+}
+
+window.handleWppCheckClick = function() {
+  // Mantém popup aberto para quando o cliente voltar poder clicar em "Já conferi"
+};
+
+window.openPixQrCodeModal = function() {
+  const stockPopup = document.getElementById("pix-stock-popup");
+  if (stockPopup) stockPopup.classList.remove("open");
+
+  const favProducts = products.filter((p) => favorites.includes(p.id));
+  const selectedProducts = favProducts.filter((p) => selectedFavIds.has(p.id));
+  const total = selectedProducts.reduce((sum, p) => sum + Number(p.price || 0), 0);
+
+  const totalEl = document.getElementById("pix-modal-total");
+  if (totalEl) totalEl.textContent = `Total a Transferir: ${formatPrice(total)}`;
+
+  const qrImg = document.getElementById("pix-qr-img");
+  if (qrImg) {
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(WHATSAPP_PHONE)}`;
+  }
+
+  const qrPopup = document.getElementById("pix-qrcode-popup");
+  if (qrPopup) qrPopup.classList.add("open");
+};
+
+window.closePixPopups = function() {
+  document.getElementById("pix-stock-popup")?.classList.remove("open");
+  document.getElementById("pix-qrcode-popup")?.classList.remove("open");
+};
+
+window.copyPixKey = function() {
+  const keyInput = document.getElementById("pix-key-val");
+  if (!keyInput) return;
+  const val = keyInput.value;
+
+  const updateBtnFeedback = () => {
+    const btn = document.querySelector("#pix-qrcode-popup .preset-btn");
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = "✓ Chave Pix Copiada!";
+      btn.style.background = "#25d366";
+      btn.style.color = "#fff";
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.style.background = "";
+        btn.style.color = "";
+      }, 2500);
+    }
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(val).then(updateBtnFeedback).catch(() => {
+      keyInput.select();
+      document.execCommand("copy");
+      updateBtnFeedback();
+    });
+  } else {
+    keyInput.select();
+    document.execCommand("copy");
+    updateBtnFeedback();
+  }
+};
 
 // Toggle de Favoritar nos Cards
 if (grid) {
