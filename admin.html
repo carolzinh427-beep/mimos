@@ -568,7 +568,7 @@
         <span class="admin-tag">Painel Admin</span>
       </div>
       <div class="admin-actions">
-        <a href="index.html" target="_blank" class="btn btn-outline">Ver Catálogo ↗</a>
+        <a href="index.html" target="_blank" class="btn btn-outline">Ver Catálogo</a>
         <button id="logout-btn" class="btn btn-danger">Sair</button>
       </div>
     </header>
@@ -599,9 +599,9 @@
     <!-- Conteúdo Principal do Painel -->
     <main class="container" id="admin-main" style="display: none">
       <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-products">📦 Produtos & Imagens</button>
-        <button class="tab-btn" data-tab="tab-hero">🖼️ Banners do Hero</button>
-        <button class="tab-btn" data-tab="tab-security">🔐 Senha & Segurança</button>
+        <button class="tab-btn active" data-tab="tab-products">Produtos & Imagens</button>
+        <button class="tab-btn" data-tab="tab-hero">Banners do Hero</button>
+        <button class="tab-btn" data-tab="tab-security">Senha & Segurança</button>
       </div>
 
       <!-- ABA 1: PRODUTOS -->
@@ -612,7 +612,7 @@
             <p style="font-size: 13px; color: var(--muted)" id="products-count-label">Carregando peças...</p>
           </div>
           <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline" onclick="resetCatalogToDefault()">🔄 Sincronizar Catálogo Oficial (66 Peças)</button>
+            <button type="button" class="btn btn-outline" onclick="resetCatalogToDefault()">Sincronizar Catálogo Oficial (66 Peças)</button>
             <button class="btn btn-primary" id="open-add-modal">+ Novo Produto</button>
           </div>
         </div>
@@ -655,7 +655,7 @@
             <h3>Gerenciar Banners do Hero</h3>
             <p style="font-size: 13px; color: var(--muted)">Personalize títulos, chamadas, botões, categorias e fotos dos 3 slides principais da página inicial</p>
           </div>
-          <button type="button" class="btn btn-primary" onclick="saveHeroSlidesFromAdmin()">💾 Salvar Banners</button>
+          <button type="button" class="btn btn-primary" onclick="saveHeroSlidesFromAdmin()">Salvar Banners</button>
         </div>
 
         <div id="hero-alert" class="alert alert-success" style="display: none; margin-bottom: 20px;"></div>
@@ -680,7 +680,7 @@
 
           <!-- Bloco Inteligente de Imagem: Upload, IA Exata ou Pesquisa na Web -->
           <div class="ai-web-box">
-            <h4>📸 Imagem do Produto</h4>
+            <h4>Imagem do Produto</h4>
             <p style="font-size: 11px; color: var(--muted); margin: 0 0 10px">
               Faça upload do seu celular/computador, <strong>gere uma imagem por IA idêntica ao nome</strong> ou <strong>pesquise fotos reais na internet</strong>.
             </p>
@@ -692,10 +692,10 @@
 
             <div class="ai-web-actions">
               <button type="button" class="btn-ai" id="btn-generate-ai">
-                ✨ Gerar Imagem por IA (Idêntica ao Nome)
+                Gerar Imagem por IA (Idêntica ao Nome)
               </button>
               <button type="button" class="btn-web" id="btn-search-web">
-                🔍 Pesquisar Fotos na Web
+                Pesquisar Fotos na Web
               </button>
             </div>
 
@@ -762,7 +762,7 @@
           <!-- Fotos Específicas por Cor (Opcional - para alternar foto ao clicar na cor) -->
           <div class="input-group" style="background: #faf8fb; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px">
-              <label style="font-size: 12px; font-weight: 700; margin: 0">🎨 Fotos Específicas por Cor</label>
+              <label style="font-size: 12px; font-weight: 700; margin: 0">Fotos Específicas por Cor</label>
               <button type="button" class="preset-btn" id="btn-sync-color-rows" style="font-size: 10px">Sincronizar Cores Digitadas</button>
             </div>
             <p style="font-size: 11px; color: var(--muted); margin-bottom: 8px">
@@ -1077,10 +1077,10 @@
               <span style="font-size: 11px; font-weight: 700; color: var(--purple-dark)">${color}:</span>
               <div style="display: flex; gap: 6px; align-items: center">
                 ${currentImg ? `<img src="${currentImg}" class="color-photo-thumb" alt="${color}" />` : '<span style="font-size: 10px; color: var(--muted)">Sem foto</span>'}
-                <button type="button" class="preset-btn" onclick="searchColorPhoto('${color}')">🔍 Web</button>
-                <button type="button" class="preset-btn" onclick="generateAiColorPhoto('${color}')">✨ IA</button>
+                <button type="button" class="preset-btn" onclick="searchColorPhoto('${color}')">Web</button>
+                <button type="button" class="preset-btn" onclick="generateAiColorPhoto('${color}')">IA</button>
               </div>
-              <button type="button" class="preset-btn" onclick="clearColorPhoto('${color}')" style="color: var(--danger)">✕</button>
+              <button type="button" class="preset-btn" onclick="clearColorPhoto('${color}')" style="color: var(--danger)">Remover</button>
             </div>
           `;
         }).join("");
@@ -1165,7 +1165,7 @@
         }
         const btn = document.getElementById("btn-generate-ai");
         const origText = btn.textContent;
-        btn.textContent = "⏳ Gerando com IA...";
+        btn.textContent = "Gerando com IA...";
         btn.disabled = true;
 
         const aiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prodName + ' fashion product photography studio lighting luxury background ultra realistic 4k')}?width=800&height=1000&nologo=true&seed=${Math.floor(Math.random() * 100000)}`;

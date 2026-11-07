@@ -73,7 +73,7 @@ function createProductCardHtml(product) {
         <img src="${product.image}" alt="${product.name}" loading="lazy" />
         ${tagHtml}
         <button class="product-fav ${isFav ? 'is-fav' : ''}" type="button" data-id="${product.id}" aria-label="Favoritar ${product.name}" onclick="event.stopPropagation();">
-          ${isFav ? '♥' : '♡'}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </button>
       </div>
       <div class="product-info">
@@ -82,7 +82,7 @@ function createProductCardHtml(product) {
           <div class="product-price">
             <strong style="${isEsgotado ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${formatPrice(product.price)}</strong>
           </div>
-          <span class="mobile-tap-hint">Ver detalhes ↗</span>
+          <span class="mobile-tap-hint">Ver detalhes</span>
           ${!isEsgotado ? `
             <a class="product-wa-btn" href="${getWaProductUrl(product)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation();">
               <span>Pedir</span>
@@ -460,7 +460,7 @@ function updateModalFavBtnState(id) {
 
   const isFav = favorites.includes(id);
   favBtn.classList.toggle("is-fav", isFav);
-  favIcon.textContent = isFav ? "♥" : "♡";
+  favIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
   favText.textContent = isFav ? "Salvo nos Favoritos" : "Salvar Favorito";
 }
 
@@ -624,7 +624,7 @@ function updateFavoritesUI() {
   });
 
   if (favProducts.length === 0) {
-    drawerItems.innerHTML = '<p class="drawer-empty">Você ainda não favoritou nenhuma peça. Clique no coração ♡ nos produtos para salvar seus favoritos</p>';
+    drawerItems.innerHTML = '<p class="drawer-empty">Você ainda não favoritou nenhuma peça. Clique no coração nos produtos para salvar seus favoritos</p>';
     if (sendFavsWa) sendFavsWa.style.display = "none";
     updateFavSubtotal();
   } else {
@@ -639,7 +639,7 @@ function updateFavoritesUI() {
           <strong>${p.name}</strong>
           <span>${formatPrice(p.price)}</span>
         </div>
-        <button class="drawer-item-remove" data-id="${p.id}" title="Remover dos favoritos">✕</button>
+        <button class="drawer-item-remove" data-id="${p.id}" title="Remover dos favoritos" aria-label="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
     `).join("");
 
@@ -747,7 +747,7 @@ window.copyPixKey = function() {
     const btn = document.querySelector("#pix-qrcode-popup .preset-btn");
     if (btn) {
       const orig = btn.textContent;
-      btn.textContent = "✓ Chave Pix Copiada!";
+      btn.textContent = "Chave Pix Copiada!";
       btn.style.background = "#25d366";
       btn.style.color = "#fff";
       setTimeout(() => {
@@ -883,8 +883,8 @@ function initHeroSlider() {
           <h1>${slide.title}</h1>
           <p class="hero-text">${slide.subtitle}</p>
           <div class="hero-actions">
-            <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="${slide.filter || 'Novidades'}">${slide.btnText || 'Ver Coleção'} <span>↗</span></a>
-            <a class="text-link" href="https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre ' + slide.title + ' da Mimo Íntimo')}" target="_blank" rel="noreferrer">Falar no WhatsApp <span>→</span></a>
+            <a class="button button-primary hero-btn-cat" href="#catalogo" data-filter="${slide.filter || 'Novidades'}">${slide.btnText || 'Ver Coleção'}</a>
+            <a class="text-link" href="https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Olá! Gostaria de saber mais sobre ' + slide.title + ' da Mimo Íntimo')}" target="_blank" rel="noreferrer">Falar no WhatsApp</a>
           </div>
         </div>
       </div>
