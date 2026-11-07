@@ -1151,6 +1151,7 @@
         modalTitle.textContent = "Novo Produto";
         productForm.reset();
         document.getElementById("prod-id").value = "";
+        document.getElementById("prod-brand").value = "";
         document.getElementById("prod-colors").value = "";
         document.getElementById("prod-sizes").value = "";
         document.getElementById("prod-esgotado").checked = false;
@@ -1184,6 +1185,7 @@
         document.getElementById("prod-id").value = p.id;
         document.getElementById("prod-name").value = p.name;
         document.getElementById("prod-category").value = p.category;
+        document.getElementById("prod-brand").value = p.brand || "";
         document.getElementById("prod-detail").value = p.detail || "";
         document.getElementById("prod-price").value = p.price;
         document.getElementById("prod-tag").value = p.tag || "Destaque";
@@ -1214,6 +1216,7 @@
         const id = document.getElementById("prod-id").value || `prod-${Date.now()}`;
         const name = document.getElementById("prod-name").value.trim();
         const category = document.getElementById("prod-category").value;
+        const brand = document.getElementById("prod-brand").value.trim();
         const detail = document.getElementById("prod-detail").value.trim();
         const price = parseFloat(document.getElementById("prod-price").value) || 0;
         const tag = document.getElementById("prod-tag").value.trim() || "Destaque";
@@ -1224,7 +1227,7 @@
         const image = currentImageData || "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=650&q=80";
 
         const existingIndex = products.findIndex((p) => p.id === id);
-        const itemData = { id, name, category, detail, price, tag, colors, sizes, esgotado, colorPhotos, image };
+        const itemData = { id, name, category, brand, detail, price, tag, colors, sizes, esgotado, colorPhotos, image };
 
         if (existingIndex >= 0) {
           products[existingIndex] = itemData;
