@@ -261,9 +261,39 @@ function openProductModal(id, skipHash) {
     updateModalWaLink(product);
   }
 
+  // Atualiza estado do botão de favoritar no modal
+  currentActiveModalId = id;
+  updateModalFavBtnState(id);
+
   detailModal.classList.add("open");
   detailModal.setAttribute("aria-hidden", "false");
 }
+
+let currentActiveModalId = null;
+
+function updateModalFavBtnState(id) {
+  const favBtn = document.getElementById("modal-detail-favbtn");
+  const favIcon = document.getElementById("modal-detail-favicon");
+  const favText = document.getElementById("modal-detail-favtext");
+  if (!favBtn || !favIcon || !favText) return;
+
+  const isFav = favorites.includes(id);
+  favBtn.classList.toggle("is-fav", isFav);
+  favIcon.textContent = isFav ? "♥" : "♡";
+  favText.textContent = isFav ? "Salvo nos Favoritos" : "Salvar Favorito";
+}
+
+window.toggleModalProductFav = function() {
+  if (!currentActiveModalId) return;
+  if (favorites.includes(currentActiveModalId)) {
+    favorites = favorites.filter((id) => id !== currentActiveModalId);
+  } else {
+    favorites.push(currentActiveModalId);
+  }
+  updateModalFavBtnState(currentActiveModalId);
+  updateFavoritesUI();
+  renderProducts();
+};
 
 function updateModalWaLink(product) {
   const waBtn = document.getElementById("modal-detail-wabtn");
